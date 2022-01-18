@@ -30,13 +30,14 @@ loadServer <- function(id){
         if(!is.null(input$localfile$datapath)){
           fread(input$localfile$datapath)
         }else{
-          fread('meterData.csv')
+          readRDS('meterData.rds')
         }
       })
       output$tableOutput <- DT::renderDataTable({
         req(dat())
         DT::datatable(dat(), options = list(scrollX = T, scrollCollapse = T))
       })
+      return(dat)
     }
   )
 }
