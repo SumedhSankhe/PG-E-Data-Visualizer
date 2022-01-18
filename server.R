@@ -5,10 +5,7 @@ function(input, output, session){
     stopApp()
   })
   
-  
-  
-  
   homeServer('home')
-  loadServer('loadData')
-  analyseServer('analyse')
+  dt <- loadServer('loadData')
+  analyseServer('analyse', dt = dt)
 }
