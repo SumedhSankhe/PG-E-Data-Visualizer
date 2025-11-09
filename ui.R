@@ -45,9 +45,6 @@ shinyUI(
         ),
         shinydashboard::tabItem(
           tabName = 'cost', costUI('cost')
-        ),
-        shinydashboard::tabItem(
-          tabName = 'analyse', analyseUI('analyse')
         )
       )
     )
