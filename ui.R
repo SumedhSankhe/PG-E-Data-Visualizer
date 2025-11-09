@@ -14,6 +14,8 @@ shinyUI(
                                  icon = icon('file-import')),
         shinydashboard::menuItem(text = 'Quality Control', tabName = 'qc',
                                  icon = icon('check-circle')),
+        shinydashboard::menuItem(text = 'Anomaly Detection', tabName = 'anomaly',
+                                 icon = icon('exclamation-triangle')),
         shinydashboard::menuItem(text = 'Analyse', tabName = 'analyse',
                                  icon = icon('project-diagram'))
       )
@@ -32,6 +34,9 @@ shinyUI(
         ),
         shinydashboard::tabItem(
           tabName = 'qc', qcUI('qc')
+        ),
+        shinydashboard::tabItem(
+          tabName = 'anomaly', anomalyUI('anomaly')
         ),
         shinydashboard::tabItem(
           tabName = 'analyse', analyseUI('analyse')

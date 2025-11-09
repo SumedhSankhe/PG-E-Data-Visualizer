@@ -44,6 +44,7 @@ source('home.R')
 source('loadData.R')
 source('analyse.R')
 source('qc.R')
+source("anomaly.R")
 log_debug("Core modules sourced")
 
 
