@@ -9,11 +9,12 @@ costUI <- function(id, label = 'cost') {
       shinydashboard::box(
         width = 12,
         title = 'Cost Analysis Settings', status = 'primary', solidHeader = TRUE,
+        # Rate Plan Selector Row
         fluidRow(
-          column(width = 4,
+          column(width = 12,
                  selectInput(
                    inputId = ns('rate_plan'),
-                   label = 'Rate Plan',
+                   label = tags$span(icon('money-bill-wave'), ' Select Rate Plan'),
                    choices = list(
                      'Time of Use (TOU)' = 'tou',
                      'Tiered Rate' = 'tiered',
@@ -21,103 +22,18 @@ costUI <- function(id, label = 'cost') {
                      'Custom Rate' = 'custom'
                    ),
                    selected = 'tou'
-                 )),
-          column(width = 4,
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('peak_rate'),
-                     label = 'Peak Rate ($/kWh)',
-                     value = 0.45,
-                     min = 0,
-                     max = 2,
-                     step = 0.01
-                   )
-                 ),
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tiered'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('tier1_rate'),
-                     label = 'Tier 1 Rate ($/kWh)',
-                     value = 0.30,
-                     min = 0,
-                     max = 2,
-                     step = 0.01
-                   )
-                 )),
-          column(width = 4,
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('offpeak_rate'),
-                     label = 'Off-Peak Rate ($/kWh)',
-                     value = 0.25,
-                     min = 0,
-                     max = 2,
-                     step = 0.01
-                   )
-                 ),
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tiered'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('tier2_rate'),
-                     label = 'Tier 2 Rate ($/kWh)',
-                     value = 0.40,
-                     min = 0,
-                     max = 2,
-                     step = 0.01
-                   )
                  ))
         ),
+        # Dynamic Rate Plan Inputs (server-side rendered)
+        uiOutput(ns('rate_plan_inputs')),
+        # Calculate Button Row
         fluidRow(
-          column(width = 3,
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('peak_start'),
-                     label = 'Peak Start Hour',
-                     value = 16,
-                     min = 0,
-                     max = 23,
-                     step = 1
-                   )
-                 ),
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tiered'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('tier1_limit'),
-                     label = 'Tier 1 Limit (kWh/day)',
-                     value = 30,
-                     min = 0,
-                     max = 1000,
-                     step = 5
-                   )
-                 )),
-          column(width = 3,
-                 conditionalPanel(
-                   condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
-                   ns = ns,
-                   numericInput(
-                     inputId = ns('peak_end'),
-                     label = 'Peak End Hour',
-                     value = 21,
-                     min = 0,
-                     max = 23,
-                     step = 1
-                   )
-                 )),
-          column(width = 4,
+          column(width = 12, align = 'center',
                  actionButton(inputId = ns('calculate_cost'),
                               label = 'Calculate Costs',
                               icon = icon('calculator'),
                               class = 'btn-primary btn-lg',
-                              style = 'margin-top: 25px; width: 100%;'))
+                              style = 'margin-top: 15px; width: 50%;'))
         )
       )
     ),
@@ -212,6 +128,129 @@ costServer <- function(id, dt) {
     id,
     function(input, output, session) {
 
+      # Dynamic Rate Plan Inputs UI ----
+      output$rate_plan_inputs <- renderUI({
+        req(input$rate_plan)
+        ns <- session$ns
+
+        if (input$rate_plan == 'tou' || input$rate_plan == 'ev') {
+          # Time of Use / EV Rate Plan
+          fluidRow(
+            column(width = 12,
+                   tags$hr(),
+                   tags$h4(icon('clock'), ' Time-Based Pricing'),
+                   tags$p(class = 'text-muted',
+                          'Set different rates for peak and off-peak hours to optimize energy costs.')
+            ),
+            column(width = 4,
+                   numericInput(
+                     inputId = ns('peak_rate'),
+                     label = tags$span(icon('arrow-up'), ' Peak Rate ($/kWh)'),
+                     value = 0.45,
+                     min = 0,
+                     max = 2,
+                     step = 0.01
+                   ),
+                   tags$small(class = 'text-muted', 'Rate during high-demand hours')),
+            column(width = 4,
+                   numericInput(
+                     inputId = ns('offpeak_rate'),
+                     label = tags$span(icon('arrow-down'), ' Off-Peak Rate ($/kWh)'),
+                     value = 0.25,
+                     min = 0,
+                     max = 2,
+                     step = 0.01
+                   ),
+                   tags$small(class = 'text-muted', 'Rate during low-demand hours')),
+            column(width = 4,
+                   tags$label('Peak Hours Window'),
+                   fluidRow(
+                     column(width = 6,
+                            numericInput(
+                              inputId = ns('peak_start'),
+                              label = 'Start',
+                              value = 16,
+                              min = 0,
+                              max = 23,
+                              step = 1
+                            )),
+                     column(width = 6,
+                            numericInput(
+                              inputId = ns('peak_end'),
+                              label = 'End',
+                              value = 21,
+                              min = 0,
+                              max = 23,
+                              step = 1
+                            ))
+                   ),
+                   tags$small(class = 'text-muted', 'Hours considered peak (0-23)'))
+          )
+
+        } else if (input$rate_plan == 'tiered') {
+          # Tiered Rate Plan
+          fluidRow(
+            column(width = 12,
+                   tags$hr(),
+                   tags$h4(icon('layer-group'), ' Tiered Pricing'),
+                   tags$p(class = 'text-muted',
+                          'Pay lower rates up to a consumption threshold, then higher rates beyond it.')
+            ),
+            column(width = 4,
+                   numericInput(
+                     inputId = ns('tier1_rate'),
+                     label = tags$span(icon('star'), ' Tier 1 Rate ($/kWh)'),
+                     value = 0.30,
+                     min = 0,
+                     max = 2,
+                     step = 0.01
+                   ),
+                   tags$small(class = 'text-muted', 'Lower rate for baseline usage')),
+            column(width = 4,
+                   numericInput(
+                     inputId = ns('tier2_rate'),
+                     label = tags$span(icon('star-half-alt'), ' Tier 2 Rate ($/kWh)'),
+                     value = 0.40,
+                     min = 0,
+                     max = 2,
+                     step = 0.01
+                   ),
+                   tags$small(class = 'text-muted', 'Higher rate above baseline')),
+            column(width = 4,
+                   numericInput(
+                     inputId = ns('tier1_limit'),
+                     label = tags$span(icon('chart-bar'), ' Tier 1 Limit (kWh/day)'),
+                     value = 30,
+                     min = 0,
+                     max = 1000,
+                     step = 5
+                   ),
+                   tags$small(class = 'text-muted', 'Daily threshold for Tier 1'))
+          )
+
+        } else if (input$rate_plan == 'custom') {
+          # Custom Rate Plan
+          fluidRow(
+            column(width = 12,
+                   tags$hr(),
+                   tags$h4(icon('cog'), ' Custom Flat Rate'),
+                   tags$p(class = 'text-muted',
+                          'Apply a single flat rate to all consumption regardless of time or usage level.')
+            ),
+            column(width = 6, offset = 3,
+                   numericInput(
+                     inputId = ns('custom_rate'),
+                     label = tags$span(icon('dollar-sign'), ' Custom Rate ($/kWh)'),
+                     value = 0.35,
+                     min = 0,
+                     max = 2,
+                     step = 0.01
+                   ),
+                   tags$small(class = 'text-muted', 'Flat rate applied to all consumption'))
+          )
+        }
+      })
+
       # Cost Calculation Reactive ----
       cost_results <- reactive({
         input$calculate_cost
@@ -277,10 +316,11 @@ costServer <- function(id, dt) {
           results$tier2_cost <- sum(daily_totals$tier2_usage * tier2_rate, na.rm = TRUE)
 
         } else {
-          # Custom or default flat rate
-          flat_rate <- 0.35
-          df[, cost := value * flat_rate]
-          results$flat_rate <- flat_rate
+          # Custom flat rate
+          custom_rate <- input$custom_rate
+          if (is.null(custom_rate)) custom_rate <- 0.35  # fallback
+          df[, cost := value * custom_rate]
+          results$custom_rate <- custom_rate
         }
 
         # Overall statistics
