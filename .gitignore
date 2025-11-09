@@ -5,3 +5,7 @@
 *.png
 *.csv
 *.zip
+logs/*.log
+logs/*.txt
+logs/*.json
+data/*.csv
