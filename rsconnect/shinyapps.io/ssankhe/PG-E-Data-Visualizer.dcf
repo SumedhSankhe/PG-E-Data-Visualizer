@@ -1,0 +1,13 @@
+name: PG-E-Data-Visualizer
+title: PG-E-Data-Visualizer
+username: ssankhe
+account: ssankhe
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16009106
+bundleId: 11152004
+url: https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .claude/settings.local.json|.github/CODEOWNERS|.github/workflows/ci-tests.yml|.lintr|docs/AGENTS.md|docs/CODE_REVIEW_CHECKLIST.md|scripts/coverage.R|scripts/lint.R|scripts/style.R|scripts/test.R|tests/testthat/test_modules.R|tests/testthat.R
