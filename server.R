@@ -12,6 +12,8 @@ function(input, output, session) {
   homeServer('home')
   log_debug("[server] Init loadData module")
   dt <- loadServer('loadData')
+  log_debug("[server] Init qc module")
+  qcServer('qc', dt = dt)
   log_debug("[server] Init analyse module")
   analyseServer('analyse', dt = dt)
 
