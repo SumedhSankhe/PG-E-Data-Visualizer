@@ -378,6 +378,10 @@ qcServer <- function(id, dt) {
         qc <- qc_results()
         req(qc$completeness_by_hour)
 
+        validate(
+          need(nrow(qc$completeness_by_hour) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
+
         plotly::plot_ly(
           data = qc$completeness_by_hour,
           x = ~hour,
@@ -413,6 +417,10 @@ qcServer <- function(id, dt) {
       output$qc_distribution_plot <- plotly::renderPlotly({
         qc <- qc_results()
         df <- qc$data_with_flags
+
+        validate(
+          need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
 
         # Create separate boxplots for normal data and outliers
         plotly::plot_ly() |>
@@ -458,6 +466,10 @@ qcServer <- function(id, dt) {
       output$qc_timeseries_plot <- plotly::renderPlotly({
         qc <- qc_results()
         df <- qc$data_with_flags
+
+        validate(
+          need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
 
         # Normal data points
         p <- plotly::plot_ly(df[has_issue == FALSE], x = ~dttm_start, y = ~value,

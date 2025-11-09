@@ -107,6 +107,10 @@ analyseServer <- function(id, dt){
         df[, ':='(start = as.Date(dttm_start))]
         df <- df[start >= input$dates[1] & start <= input$dates[2]]
 
+        validate(
+          need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
+
         output$tsplot <- plotly::renderPlotly({
           plotly::ggplotly(
             ggplot(data = df,

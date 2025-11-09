@@ -379,6 +379,10 @@ anomalyServer <- function(id, dt) {
         results <- anomaly_results()
         df <- results$data
 
+        validate(
+          need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
+
         # Normal data
         p <- plotly::plot_ly()
 
@@ -474,6 +478,10 @@ anomalyServer <- function(id, dt) {
       output$anomaly_hourly_dist <- plotly::renderPlotly({
         results <- anomaly_results()
         req(results$hourly_anomalies)
+
+        validate(
+          need(nrow(results$hourly_anomalies) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
+        )
 
         plotly::plot_ly(
           data = results$hourly_anomalies,
