@@ -16,6 +16,8 @@ shinyUI(
                                  icon = icon('check-circle')),
         shinydashboard::menuItem(text = 'Anomaly Detection', tabName = 'anomaly',
                                  icon = icon('exclamation-triangle')),
+        shinydashboard::menuItem(text = 'Pattern Recognition', tabName = 'pattern',
+                                 icon = icon('chart-line')),
         shinydashboard::menuItem(text = 'Analyse', tabName = 'analyse',
                                  icon = icon('project-diagram'))
       )
@@ -37,6 +39,9 @@ shinyUI(
         ),
         shinydashboard::tabItem(
           tabName = 'anomaly', anomalyUI('anomaly')
+        ),
+        shinydashboard::tabItem(
+          tabName = 'pattern', patternUI('pattern')
         ),
         shinydashboard::tabItem(
           tabName = 'analyse', analyseUI('analyse')

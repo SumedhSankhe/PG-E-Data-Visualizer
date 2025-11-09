@@ -16,6 +16,8 @@ function(input, output, session) {
   qcServer('qc', dt = dt)
   log_debug("[server] Init anomaly module")
   anomalyServer('anomaly', dt = dt)
+  log_debug("[server] Init pattern module")
+  patternServer('pattern', dt = dt)
   log_debug("[server] Init analyse module")
   analyseServer('analyse', dt = dt)
 
