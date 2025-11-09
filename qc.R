@@ -4,19 +4,17 @@ qcUI <- function(id, label = 'qc') {
   h3('Data Quality Control')
   shinyjs::useShinyjs()
   fluidPage(
-    # Date Range Filter
+    # QC Controls
     fluidRow(
       shinydashboard::box(
         width = 12,
-        title = 'QC Filters', status = 'primary', solidHeader = TRUE,
-        column(width = 4,
-               uiOutput(outputId = ns('dateRange'))),
-        column(width = 4,
+        title = 'QC Controls', status = 'primary', solidHeader = TRUE,
+        column(width = 6,
                actionButton(inputId = ns('run_qc'),
                             label = 'Run QC Analysis',
                             icon = icon('play'),
                             class = 'btn-primary btn-lg')),
-        column(width = 4,
+        column(width = 6,
                downloadButton(ns('download_qc_report'),
                               label = 'Download QC Report',
                               class = 'btn-success btn-lg'))
@@ -100,67 +98,22 @@ qcServer <- function(id, dt) {
     id,
     function(input, output, session) {
 
-      # Date Range UI ----
-      observe({
-        output$dateRange <- renderUI({
-          req(dt())
-          ns <- session$ns
-          logger::log_debug("Rendering QC date range selector")
-
-          # Get min and max dates from data
-          data_min_date <- as.Date(min(dt()$dttm_start))
-          data_max_date <- as.Date(max(dt()$dttm_start))
-
-          # Default to first available day (1 day range)
-          default_start <- data_min_date
-          default_end <- data_min_date
-
-          logger::log_info("QC date range: data available from {data_min_date} to {data_max_date}, defaulting to {default_start}")
-
-          dateRangeInput(
-            inputId = ns('dates'),
-            label = 'Date Range for QC Analysis',
-            start = default_start,
-            end = default_end,
-            min = data_min_date,
-            max = data_max_date
-          )
-        })
-      })
-
-      # Filtered Data Reactive ----
-      filtered_data <- reactive({
-        req(dt())
-        req(input$dates)
-
-        validate(
-          need(!is.na(input$dates[1]), 'Select a start date'),
-          need(!is.na(input$dates[2]), 'Select an end date')
-        )
-
-        df <- copy(dt())
-        df[, start_date := as.Date(dttm_start)]
-        df_filtered <- df[start_date >= input$dates[1] & start_date <= input$dates[2]]
-
-        logger::log_info("QC data filtered: {nrow(df_filtered)} records from {input$dates[1]} to {input$dates[2]}")
-        return(df_filtered)
-      })
-
       # QC Analysis Reactive ----
       qc_results <- reactive({
-        # Trigger on button click OR when filtered data changes
+        # Trigger on button click OR when data changes
         input$run_qc
-        req(filtered_data())
-        logger::log_info("Running QC analysis on filtered data")
+        req(dt())
+        logger::log_info("Running QC analysis on globally filtered data")
 
-        df <- filtered_data()
+        df <- copy(dt())
 
         # Initialize QC results list
         qc <- list()
 
         # Total records
         qc$total_records <- nrow(df)
-        qc$date_range <- paste(input$dates[1], "to", input$dates[2])
+        # Get actual date range from data
+        qc$date_range <- paste(min(as.Date(df$dttm_start)), "to", max(as.Date(df$dttm_start)))
 
         # Missing values check
         qc$missing_values <- sum(is.na(df$value))

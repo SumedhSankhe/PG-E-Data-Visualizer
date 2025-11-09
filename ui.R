@@ -20,6 +20,10 @@ shinyUI(
                                  icon = icon('chart-line')),
         shinydashboard::menuItem(text = 'Cost Optimization', tabName = 'cost',
                                  icon = icon('dollar-sign'))
+      ),
+      hr(),
+      div(style = "padding: 10px;",
+          uiOutput('global_date_range')
       )
     ),
     body = shinydashboard::dashboardBody(
