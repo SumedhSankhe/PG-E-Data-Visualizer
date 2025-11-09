@@ -20,8 +20,6 @@ function(input, output, session) {
   patternServer('pattern', dt = dt)
   log_debug("[server] Init cost module")
   costServer('cost', dt = dt)
-  log_debug("[server] Init analyse module")
-  analyseServer('analyse', dt = dt)
 
   # Reactive watcher for dataset size changes
   observe({
