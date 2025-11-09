@@ -10,9 +10,7 @@ costUI <- function(id, label = 'cost') {
         width = 12,
         title = 'Cost Analysis Settings', status = 'primary', solidHeader = TRUE,
         fluidRow(
-          column(width = 3,
-                 uiOutput(outputId = ns('dateRange'))),
-          column(width = 3,
+          column(width = 4,
                  selectInput(
                    inputId = ns('rate_plan'),
                    label = 'Rate Plan',
@@ -24,7 +22,7 @@ costUI <- function(id, label = 'cost') {
                    ),
                    selected = 'tou'
                  )),
-          column(width = 3,
+          column(width = 4,
                  conditionalPanel(
                    condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
                    ns = ns,
@@ -49,7 +47,7 @@ costUI <- function(id, label = 'cost') {
                      step = 0.01
                    )
                  )),
-          column(width = 3,
+          column(width = 4,
                  conditionalPanel(
                    condition = "input.rate_plan == 'tou' || input.rate_plan == 'ev'",
                    ns = ns,
@@ -114,7 +112,7 @@ costUI <- function(id, label = 'cost') {
                      step = 1
                    )
                  )),
-          column(width = 3, offset = 3,
+          column(width = 4,
                  actionButton(inputId = ns('calculate_cost'),
                               label = 'Calculate Costs',
                               icon = icon('calculator'),
@@ -214,61 +212,16 @@ costServer <- function(id, dt) {
     id,
     function(input, output, session) {
 
-      # Date Range UI ----
-      observe({
-        output$dateRange <- renderUI({
-          req(dt())
-          ns <- session$ns
-          logger::log_debug("Rendering Cost Optimization date range selector")
-
-          # Get min and max dates from data
-          data_min_date <- as.Date(min(dt()$dttm_start))
-          data_max_date <- as.Date(max(dt()$dttm_start))
-
-          # Default to last 30 days or all available
-          default_end <- data_max_date
-          default_start <- max(data_min_date, data_max_date - 29)
-
-          logger::log_info("Cost date range: data available from {data_min_date} to {data_max_date}")
-
-          dateRangeInput(
-            inputId = ns('dates'),
-            label = 'Date Range for Analysis',
-            start = default_start,
-            end = default_end,
-            min = data_min_date,
-            max = data_max_date
-          )
-        })
-      })
-
-      # Filtered Data Reactive ----
-      filtered_data <- reactive({
-        req(dt())
-        req(input$dates)
-
-        validate(
-          need(!is.na(input$dates[1]), 'Select a start date'),
-          need(!is.na(input$dates[2]), 'Select an end date')
-        )
-
-        df <- copy(dt())
-        df[, start_date := as.Date(dttm_start)]
-        df_filtered <- df[start_date >= input$dates[1] & start_date <= input$dates[2]]
-
-        logger::log_info("Cost data filtered: {nrow(df_filtered)} records from {input$dates[1]} to {input$dates[2]}")
-        return(df_filtered)
-      })
-
       # Cost Calculation Reactive ----
       cost_results <- reactive({
         input$calculate_cost
-        req(filtered_data())
+        req(dt())
         req(input$rate_plan)
 
         logger::log_info("Calculating costs with rate plan: {input$rate_plan}")
 
-        df <- filtered_data()
+        df <- copy(dt())
+        df[, start_date := as.Date(dttm_start)]
 
         validate(
           need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')

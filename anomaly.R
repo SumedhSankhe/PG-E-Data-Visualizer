@@ -9,9 +9,7 @@ anomalyUI <- function(id, label = 'anomaly') {
       shinydashboard::box(
         width = 12,
         title = 'Anomaly Detection Settings', status = 'primary', solidHeader = TRUE,
-        column(width = 3,
-               uiOutput(outputId = ns('dateRange'))),
-        column(width = 3,
+        column(width = 4,
                selectInput(
                  inputId = ns('detection_method'),
                  label = 'Detection Method',
@@ -23,7 +21,7 @@ anomalyUI <- function(id, label = 'anomaly') {
                  ),
                  selected = 'iqr'
                )),
-        column(width = 3,
+        column(width = 4,
                numericInput(
                  inputId = ns('sensitivity'),
                  label = 'Sensitivity (1-10)',
@@ -32,7 +30,7 @@ anomalyUI <- function(id, label = 'anomaly') {
                  max = 10,
                  step = 1
                )),
-        column(width = 3,
+        column(width = 4,
                actionButton(inputId = ns('run_detection'),
                             label = 'Detect Anomalies',
                             icon = icon('search'),
@@ -113,62 +111,16 @@ anomalyServer <- function(id, dt) {
     id,
     function(input, output, session) {
 
-      # Date Range UI ----
-      observe({
-        output$dateRange <- renderUI({
-          req(dt())
-          ns <- session$ns
-          logger::log_debug("Rendering Anomaly Detection date range selector")
-
-          # Get min and max dates from data
-          data_min_date <- as.Date(min(dt()$dttm_start))
-          data_max_date <- as.Date(max(dt()$dttm_start))
-
-          # Default to first 7 days
-          default_start <- data_min_date
-          default_end <- min(data_min_date + 6, data_max_date)
-
-          logger::log_info("Anomaly date range: data available from {data_min_date} to {data_max_date}")
-
-          dateRangeInput(
-            inputId = ns('dates'),
-            label = 'Date Range for Analysis',
-            start = default_start,
-            end = default_end,
-            min = data_min_date,
-            max = data_max_date
-          )
-        })
-      })
-
-      # Filtered Data Reactive ----
-      filtered_data <- reactive({
-        req(dt())
-        req(input$dates)
-
-        validate(
-          need(!is.na(input$dates[1]), 'Select a start date'),
-          need(!is.na(input$dates[2]), 'Select an end date')
-        )
-
-        df <- copy(dt())
-        df[, start_date := as.Date(dttm_start)]
-        df_filtered <- df[start_date >= input$dates[1] & start_date <= input$dates[2]]
-
-        logger::log_info("Anomaly data filtered: {nrow(df_filtered)} records from {input$dates[1]} to {input$dates[2]}")
-        return(df_filtered)
-      })
-
       # Anomaly Detection Reactive ----
       anomaly_results <- reactive({
         input$run_detection
-        req(filtered_data())
+        req(dt())
         req(input$detection_method)
         req(input$sensitivity)
 
         logger::log_info("Running anomaly detection with method: {input$detection_method}, sensitivity: {input$sensitivity}")
 
-        df <- filtered_data()
+        df <- copy(dt())
         method <- input$detection_method
         sensitivity <- input$sensitivity
 
