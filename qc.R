@@ -406,9 +406,10 @@ qcServer <- function(id, dt) {
           ) |>
           plotly::config(
             modeBarButtonsToRemove = list(
-              'pan2d', 'select2d', 'lasso2d', 'autoScale2d',
+              'pan2d', 'select2d', 'lasso2d',
               'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
             ),
+            doubleClick = 'reset',
             displaylogo = FALSE
           )
       })
@@ -455,9 +456,10 @@ qcServer <- function(id, dt) {
           ) |>
           plotly::config(
             modeBarButtonsToRemove = list(
-              'pan2d', 'select2d', 'lasso2d', 'autoScale2d',
+              'pan2d', 'select2d', 'lasso2d',
               'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
             ),
+            doubleClick = 'reset',
             displaylogo = FALSE
           )
       })
@@ -507,9 +509,10 @@ qcServer <- function(id, dt) {
         ) |>
           plotly::config(
             modeBarButtonsToRemove = list(
-              'pan2d', 'select2d', 'lasso2d', 'autoScale2d',
+              'pan2d', 'select2d', 'lasso2d',
               'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
             ),
+            doubleClick = 'reset',
             displaylogo = FALSE
           )
       })

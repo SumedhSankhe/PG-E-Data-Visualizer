@@ -393,7 +393,14 @@ patternServer <- function(id, dt) {
               yaxis = list(title = "Consumption (kWh)"),
               hovermode = 'closest'
             ) |>
-            plotly::config(displaylogo = FALSE)
+            plotly::config(
+              modeBarButtonsToRemove = list(
+                'pan2d', 'select2d', 'lasso2d',
+                'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
+              ),
+              doubleClick = 'reset',
+              displaylogo = FALSE
+            )
 
         } else if (pattern_type == 'weekly') {
           # Weekly pattern by day
@@ -410,7 +417,14 @@ patternServer <- function(id, dt) {
               yaxis = list(title = "Average Consumption (kWh)"),
               hovermode = 'closest'
             ) |>
-            plotly::config(displaylogo = FALSE)
+            plotly::config(
+              modeBarButtonsToRemove = list(
+                'pan2d', 'select2d', 'lasso2d',
+                'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
+              ),
+              doubleClick = 'reset',
+              displaylogo = FALSE
+            )
 
         } else if (pattern_type == 'daytype') {
           # Weekday vs Weekend comparison
@@ -428,7 +442,14 @@ patternServer <- function(id, dt) {
               yaxis = list(title = "Average Consumption (kWh)"),
               hovermode = 'closest'
             ) |>
-            plotly::config(displaylogo = FALSE)
+            plotly::config(
+              modeBarButtonsToRemove = list(
+                'pan2d', 'select2d', 'lasso2d',
+                'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
+              ),
+              doubleClick = 'reset',
+              displaylogo = FALSE
+            )
 
         } else if (pattern_type == 'clustering') {
           if (!is.null(results$clustering_error)) {
@@ -455,7 +476,14 @@ patternServer <- function(id, dt) {
                 hovermode = 'closest',
                 legend = list(title = list(text = 'Cluster'))
               ) |>
-              plotly::config(displaylogo = FALSE)
+              plotly::config(
+              modeBarButtonsToRemove = list(
+                'pan2d', 'select2d', 'lasso2d',
+                'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
+              ),
+              doubleClick = 'reset',
+              displaylogo = FALSE
+            )
           }
         }
       })
