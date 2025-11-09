@@ -18,6 +18,8 @@ function(input, output, session) {
   anomalyServer('anomaly', dt = dt)
   log_debug("[server] Init pattern module")
   patternServer('pattern', dt = dt)
+  log_debug("[server] Init cost module")
+  costServer('cost', dt = dt)
   log_debug("[server] Init analyse module")
   analyseServer('analyse', dt = dt)
 

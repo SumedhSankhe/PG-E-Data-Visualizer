@@ -468,8 +468,10 @@ anomalyServer <- function(id, dt) {
         ) |>
           plotly::config(
             modeBarButtonsToRemove = list(
-              'pan2d', 'select2d', 'lasso2d', 'autoScale2d'
+              'pan2d', 'select2d', 'lasso2d',
+              'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
             ),
+            doubleClick = 'reset',
             displaylogo = FALSE
           )
       })
@@ -505,8 +507,10 @@ anomalyServer <- function(id, dt) {
           ) |>
           plotly::config(
             modeBarButtonsToRemove = list(
-              'pan2d', 'select2d', 'lasso2d', 'autoScale2d'
+              'pan2d', 'select2d', 'lasso2d',
+              'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
             ),
+            doubleClick = 'reset',
             displaylogo = FALSE
           )
       })
@@ -542,7 +546,14 @@ anomalyServer <- function(id, dt) {
             plotly::layout(
               showlegend = TRUE
             ) |>
-            plotly::config(displaylogo = FALSE)
+            plotly::config(
+              modeBarButtonsToRemove = list(
+                'pan2d', 'select2d', 'lasso2d',
+                'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'
+              ),
+              doubleClick = 'reset',
+              displaylogo = FALSE
+            )
         }
       })
 

@@ -18,8 +18,8 @@ shinyUI(
                                  icon = icon('exclamation-triangle')),
         shinydashboard::menuItem(text = 'Pattern Recognition', tabName = 'pattern',
                                  icon = icon('chart-line')),
-        shinydashboard::menuItem(text = 'Analyse', tabName = 'analyse',
-                                 icon = icon('project-diagram'))
+        shinydashboard::menuItem(text = 'Cost Optimization', tabName = 'cost',
+                                 icon = icon('dollar-sign'))
       )
     ),
     body = shinydashboard::dashboardBody(
@@ -42,6 +42,9 @@ shinyUI(
         ),
         shinydashboard::tabItem(
           tabName = 'pattern', patternUI('pattern')
+        ),
+        shinydashboard::tabItem(
+          tabName = 'cost', costUI('cost')
         ),
         shinydashboard::tabItem(
           tabName = 'analyse', analyseUI('analyse')

@@ -46,6 +46,7 @@ source('analyse.R')
 source('qc.R')
 source("anomaly.R")
 source("pattern.R")
+source("cost.R")
 log_debug("Core modules sourced")
 
 
