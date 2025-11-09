@@ -7,7 +7,7 @@ An R Shiny dashboard for exploring and analyzing PG&E smart meter data with inte
 
 ## Features
 - Modular Shiny architecture (`home`, `loadData`, `analyse` modules)
-- Data upload or fallback to bundled `meterData.rds`
+- Data upload or fallback to bundled `data/meterData.rds`
 - Time series visualization with ggplot2 + plotly
 - Hourly distribution box/jitter plots
 - Dynamic tier & plan controls (TOU plans, etc.)
@@ -17,6 +17,14 @@ An R Shiny dashboard for exploring and analyzing PG&E smart meter data with inte
 # Inside R
 renv::restore()        # if using renv to install dependencies
 shiny::runApp('.')     # launches the app
+# Logs written to logs/app-YYYY-MM-DD.log
+```
+
+## Data & Logging
+- Place persistent data files in `data/` (default sample: `data/meterData.rds`).
+- Runtime log files rotate daily by date: `logs/app-YYYY-MM-DD.log`.
+- Logging uses the `logger` package with INFO threshold; adjust in `global.R`.
+- Fallback data is loaded via `read_rds_safely()` with warnings if missing.
 ```
 
 ## Repository Sub-Agents
@@ -76,6 +84,8 @@ See `docs/CODE_REVIEW_CHECKLIST.md` for required review gates.
 - Accessibility audits
  - Code coverage via `covr` & badge
  - Visual regression of plots (PNG diff)
+ - Log rotation + size limits (custom appender)
+ - Structured logging (JSON) for analytics
 
 ## License
 Add license information here (MIT / Apache-2.0 / etc.).
