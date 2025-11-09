@@ -1,0 +1,7 @@
+# Code ownership mapping
+# Pattern: owners
+# Adjust GitHub usernames as needed
+
+*               @SumedhSankhe
+scripts/*       @SumedhSankhe
+docs/*          @SumedhSankhe

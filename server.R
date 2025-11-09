@@ -1,11 +1,25 @@
-function(input, output, session){
-  
+function(input, output, session) {
+  log_info("[server] Session started: {session$token}")
+
   onStop(function() {
-    message("Application Closed")
+    log_info("[server] Application closing (session: {session$token})")
+    # Flush logger (tee appender writes synchronously, so usually fine)
     stopApp()
   })
-  
+
+  # Initialize modules with logging
+  log_debug("[server] Init home module")
   homeServer('home')
+  log_debug("[server] Init loadData module")
   dt <- loadServer('loadData')
+  log_debug("[server] Init analyse module")
   analyseServer('analyse', dt = dt)
+
+  # Reactive watcher for dataset size changes
+  observe({
+    d <- dt()
+    if (!is.null(d)) {
+      log_trace("[server] Dataset snapshot rows={nrow(d)} cols={ncol(d)}")
+    }
+  })
 }

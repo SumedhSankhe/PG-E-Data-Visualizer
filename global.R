@@ -2,15 +2,48 @@
 library(shiny)
 library(data.table)
 library(ggplot2)
-# library(shinydashboard)
-# library(plotly)
-# library(DT)
-# library(shinycssloaders)
-# library(shinyjs)
+library(logger) # lightweight logging
+# Optional deferred libraries loaded in modules (shinydashboard, plotly, DT, shinycssloaders, shinyjs)
+
+# Initialize logging -------------------------------------------------------
+# Create log directory if missing (fails silently if exists)
+if (!dir.exists("logs")) {
+  dir.create("logs")
+}
+
+log_file <- file.path("logs", sprintf("app-%s.log", format(Sys.Date(), "%Y-%m-%d")))
+
+# Set global log threshold (INFO default; can raise to WARN/ERROR in production)
+log_threshold(INFO)
+
+# Define layout with timestamp, level, namespace, message
+log_layout(layout_glue_generator(format = "[{format(Sys.time(), '%Y-%m-%d %H:%M:%S')}] {toupper(level)} {namespace} - {msg}"))
+
+# File appender + console (so messages visible interactively)
+log_appender(appender_tee(log_file))
+
+log_info("Logger initialized: {log_file}")
+
+# Helper: safely read RDS with logging
+read_rds_safely <- function(path) {
+  if (!file.exists(path)) {
+    log_warn("RDS file not found at {path}")
+    return(NULL)
+  }
+  tryCatch({
+    obj <- readRDS(path)
+    log_info("Loaded RDS: {path} (size={format(object.size(obj), units='auto')})")
+    obj
+  }, error = function(e) {
+    log_error("Failed reading {path}: {e$message}")
+    NULL
+  })
+}
 
 source('home.R')
 source('loadData.R')
 source('analyse.R')
+log_debug("Core modules sourced")
 
 
 PLANS <- c("Time of Use", "Tiered Rate Plan", "Solar & Renewable Energy Plan",
