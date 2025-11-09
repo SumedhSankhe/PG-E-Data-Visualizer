@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & Style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install dependencies (minimal for lint)
+        run: |
+          if [ -f renv.lock ]; then
+            R -q -e 'install.packages("renv"); renv::restore(prompt = FALSE)'
+          else
+            R -q -e 'install.packages(c("lintr","styler"))'
+          fi
+
+      - name: Run lintr
+        run: Rscript scripts/lint.R | tee lint-output.txt
+
+      - name: Style check (dry run)
+        run: R -q -e 'styler::style_dir(".", filetype = c("R"), exclude_dirs = c("renv"))'
+
+      - name: Upload lint artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: lint-output.txt
+
+  tests:
+    name: Tests & Coverage
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install dependencies (test set)
+        run: |
+          if [ -f renv.lock ]; then
+            R -q -e 'install.packages("renv"); renv::restore(prompt = FALSE); if(!requireNamespace("covr", quietly=TRUE)) install.packages("covr")'
+          else
+            R -q -e 'install.packages(c("shiny","data.table","ggplot2","plotly","DT","shinycssloaders","shinyjs","lintr","styler","testthat","covr"))'
+          fi
+
+      - name: Run tests
+        run: |
+          Rscript scripts/test.R | tee test-output.txt
+
+      - name: Compute coverage
+        run: |
+          Rscript scripts/coverage.R
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: |
+            test-output.txt
+            coverage-summary.txt
+            coverage.json
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: coverage.json
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+      - name: Session Info (always)
+        if: always()
+        run: R -q -e 'sessionInfo()'
