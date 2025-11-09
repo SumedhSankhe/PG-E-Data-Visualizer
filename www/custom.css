@@ -1,0 +1,143 @@
+/* Custom CSS for PG&E Data Visualizer */
+
+/* Rounded corners for all boxes */
+.box {
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Rounded corners for box headers */
+.box-header {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+
+/* Rounded corners for small boxes (value boxes) */
+.small-box {
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+}
+
+/* Softer pastel colors for value boxes */
+.small-box.bg-blue {
+  background-color: #A8D8EA !important;
+  color: #2C3E50 !important;
+}
+
+.small-box.bg-green {
+  background-color: #B8E6B8 !important;
+  color: #2C5F2D !important;
+}
+
+.small-box.bg-yellow {
+  background-color: #FFE6A7 !important;
+  color: #8B6914 !important;
+}
+
+.small-box.bg-red {
+  background-color: #FFB3BA !important;
+  color: #8B2332 !important;
+}
+
+.small-box.bg-aqua {
+  background-color: #AAE3E2 !important;
+  color: #2C5F5D !important;
+}
+
+.small-box.bg-light-blue {
+  background-color: #B3D9FF !important;
+  color: #1C4E80 !important;
+}
+
+/* Softer box header colors */
+.box.box-primary > .box-header {
+  background-color: #A8D8EA !important;
+  color: #2C3E50 !important;
+}
+
+.box.box-info > .box-header {
+  background-color: #AAE3E2 !important;
+  color: #2C5F5D !important;
+}
+
+.box.box-warning > .box-header {
+  background-color: #FFE6A7 !important;
+  color: #8B6914 !important;
+}
+
+.box.box-success > .box-header {
+  background-color: #B8E6B8 !important;
+  color: #2C5F2D !important;
+}
+
+.box.box-danger > .box-header {
+  background-color: #FFB3BA !important;
+  color: #8B2332 !important;
+}
+
+/* Softer alert colors */
+.alert-success {
+  background-color: #D4EDDA !important;
+  border-color: #C3E6CB !important;
+  color: #155724 !important;
+  border-radius: 8px !important;
+}
+
+.alert-info {
+  background-color: #D1ECF1 !important;
+  border-color: #BEE5EB !important;
+  color: #0C5460 !important;
+  border-radius: 8px !important;
+}
+
+.alert-warning {
+  background-color: #FFF3CD !important;
+  border-color: #FFEEBA !important;
+  color: #856404 !important;
+  border-radius: 8px !important;
+}
+
+.alert-danger {
+  background-color: #F8D7DA !important;
+  border-color: #F5C6CB !important;
+  color: #721C24 !important;
+  border-radius: 8px !important;
+}
+
+/* Rounded corners for inputs */
+.form-control,
+.selectize-input,
+.selectize-dropdown {
+  border-radius: 8px !important;
+}
+
+/* Rounded corners for buttons */
+.btn {
+  border-radius: 8px !important;
+}
+
+/* Softer button colors */
+.btn-primary {
+  background-color: #7CB9E8 !important;
+  border-color: #6AA9D8 !important;
+}
+
+.btn-success {
+  background-color: #90C695 !important;
+  border-color: #7FB685 !important;
+}
+
+.btn-warning {
+  background-color: #F9D88F !important;
+  border-color: #E9C87F !important;
+}
+
+/* Chart wrapper */
+.chart-wrapper {
+  overflow-x: scroll;
+}
+
+/* Progress bar */
+.shiny-progress .progress-text {
+  background-color: #FFB3BA;
+}

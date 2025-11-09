@@ -8,16 +8,21 @@ shinyUI(
     sidebar = shinydashboard::dashboardSidebar(
       width = 200,
       shinydashboard::sidebarMenu(
-        shinydashboard::menuItem(text = 'Home', tabName = 'home', 
+        shinydashboard::menuItem(text = 'Home', tabName = 'home',
                                  icon = icon('home')),
-        shinydashboard::menuItem(text = 'Data', tabName = 'loadData', 
+        shinydashboard::menuItem(text = 'Data', tabName = 'loadData',
                                  icon = icon('file-import')),
+        shinydashboard::menuItem(text = 'Quality Control', tabName = 'qc',
+                                 icon = icon('check-circle')),
         shinydashboard::menuItem(text = 'Analyse', tabName = 'analyse',
                                  icon = icon('project-diagram'))
       )
     ),
     body = shinydashboard::dashboardBody(
       shinyjs::useShinyjs(),
+      tags$head(
+        tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+      ),
       shinydashboard::tabItems(
         shinydashboard::tabItem(
           tabName = 'home', homeUI('home')
@@ -26,19 +31,12 @@ shinyUI(
           tabName = 'loadData', loadUI('loadData')
         ),
         shinydashboard::tabItem(
+          tabName = 'qc', qcUI('qc')
+        ),
+        shinydashboard::tabItem(
           tabName = 'analyse', analyseUI('analyse')
         )
       )
     )
   )
 )
-
-
-css <<- "
-.chart-wrapper {
-  overflow-x: scroll;
-}
-.shiny-progress .progress-text{
-background-color: #FF0000;
-}
-"

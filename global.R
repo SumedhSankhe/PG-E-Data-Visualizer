@@ -43,6 +43,7 @@ read_rds_safely <- function(path) {
 source('home.R')
 source('loadData.R')
 source('analyse.R')
+source('qc.R')
 log_debug("Core modules sourced")
 
 
