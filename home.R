@@ -57,67 +57,73 @@ homeUI <- function(id, label = 'home'){
 
       # Quick Start Guide - Compact version
       div(
-        style = "margin-bottom: 20px; background-color: #ecf0f1; padding: 20px; border-radius: 5px;",
-        h2("Quick Start Guide", style = "color: #34495e; margin-top: 0;"),
+        style = "margin-bottom: 20px; background-color: #f8f9fa; padding: 20px; border-radius: 4px; border: 1px solid #dee2e6;",
+        h2("Quick Start Guide", style = "color: #212529; margin-top: 0; font-size: 22px; font-weight: 600;"),
         fluidRow(
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #e8f4f8; border-radius: 8px;",
-              tags$div(style = "font-size: 36px; color: #3498db;", "1"),
-              h5("Load Data", style = "margin: 5px 0;"),
-              p(style = "font-size: 12px; margin: 0;", "Data tab → Upload CSV/TSV")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
+              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "1"),
+              h5("Load Data", style = "margin: 5px 0; color: #495057;"),
+              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Data tab → Upload CSV/TSV")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #e8f8f5; border-radius: 8px;",
-              tags$div(style = "font-size: 36px; color: #27ae60;", "2"),
-              h5("Quality Check", style = "margin: 5px 0;"),
-              p(style = "font-size: 12px; margin: 0;", "QC tab → Run QC Analysis")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
+              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "2"),
+              h5("Quality Check", style = "margin: 5px 0; color: #495057;"),
+              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "QC tab → Run QC Analysis")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #fef5e7; border-radius: 8px;",
-              tags$div(style = "font-size: 36px; color: #f39c12;", "3"),
-              h5("Analyze", style = "margin: 5px 0;"),
-              p(style = "font-size: 12px; margin: 0;", "Explore patterns & anomalies")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
+              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "3"),
+              h5("Analyze", style = "margin: 5px 0; color: #495057;"),
+              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Explore patterns & anomalies")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #fdeef4; border-radius: 8px;",
-              tags$div(style = "font-size: 36px; color: #e74c3c;", "4"),
-              h5("Optimize", style = "margin: 5px 0;"),
-              p(style = "font-size: 12px; margin: 0;", "Compare rate plans & save")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
+              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "4"),
+              h5("Optimize", style = "margin: 5px 0; color: #495057;"),
+              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Compare rate plans & save")
             )
           )
         ),
         tags$p(
-          style = "margin-top: 15px; text-align: center; font-size: 14px;",
+          style = "margin-top: 15px; text-align: center; font-size: 14px; color: #495057;",
           icon("info-circle"), " Use the ", tags$strong("sidebar date filter"), " to select your analysis period."
         )
       ),
 
       # Analysis Features Explained - Collapsible
-      shinydashboard::box(
-        width = 12,
-        status = 'info',
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('book'), ' Analysis Features Guide (click to expand)'),
+      div(
+        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        div(
+          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          onclick = "$(this).next().slideToggle(200);",
+          tags$span(
+            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            icon('book'), ' Analysis Features Guide ',
+            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+          )
+        ),
+        div(
+          style = "display: none; padding: 20px;",
         fluidRow(
           column(
             6,
             # Quality Control
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #e8f8f5; border-left: 4px solid #27ae60; border-radius: 4px;",
-              h5(icon("check-circle"), " Quality Control", style = "color: #27ae60; margin-top: 0;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5(icon("check-circle"), " Quality Control", style = "color: #495057; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Validates data quality (missing values, outliers, gaps)"),
@@ -127,8 +133,8 @@ homeUI <- function(id, label = 'home'){
             ),
             # Pattern Recognition
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #e8f4f8; border-left: 4px solid #3498db; border-radius: 4px;",
-              h5(icon("chart-line"), " Pattern Recognition", style = "color: #3498db; margin-top: 0;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5(icon("chart-line"), " Pattern Recognition", style = "color: #495057; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Discovers daily, weekly, and seasonal patterns"),
@@ -141,8 +147,8 @@ homeUI <- function(id, label = 'home'){
             6,
             # Anomaly Detection
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #fef5e7; border-left: 4px solid #f39c12; border-radius: 4px;",
-              h5(icon("exclamation-triangle"), " Anomaly Detection", style = "color: #f39c12; margin-top: 0;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5(icon("exclamation-triangle"), " Anomaly Detection", style = "color: #495057; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Finds unusual consumption spikes/drops"),
@@ -152,8 +158,8 @@ homeUI <- function(id, label = 'home'){
             ),
             # Cost Optimization
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #fdeef4; border-left: 4px solid #e74c3c; border-radius: 4px;",
-              h5(icon("dollar-sign"), " Cost Optimization", style = "color: #e74c3c; margin-top: 0;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5(icon("dollar-sign"), " Cost Optimization", style = "color: #495057; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Calculates costs under different rate plans"),
@@ -163,16 +169,23 @@ homeUI <- function(id, label = 'home'){
             )
           )
         )
+        )
       ),
 
       # Data Format Requirements - Collapsible
-      shinydashboard::box(
-        width = 12,
-        status = 'primary',
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('file-alt'), ' Data Format Requirements (click to expand)'),
+      div(
+        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        div(
+          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          onclick = "$(this).next().slideToggle(200);",
+          tags$span(
+            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            icon('file-alt'), ' Data Format Requirements ',
+            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+          )
+        ),
+        div(
+          style = "display: none; padding: 20px;",
         tags$table(
           class = "table table-striped table-bordered",
           style = "margin-top: 10px; font-size: 13px;",
@@ -215,33 +228,40 @@ homeUI <- function(id, label = 'home'){
           style = "font-size: 13px; margin-top: 10px;",
           tags$strong("Supported Formats:"), " CSV, TSV"
         )
+        )
       ),
 
       # Rate Plans Section - Collapsible
-      shinydashboard::box(
-        width = 12,
-        status = 'warning',
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('bolt'), ' Understanding PG&E Rate Plans (click to expand)'),
+      div(
+        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        div(
+          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          onclick = "$(this).next().slideToggle(200);",
+          tags$span(
+            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            icon('bolt'), ' Understanding PG&E Rate Plans ',
+            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+          )
+        ),
+        div(
+          style = "display: none; padding: 20px;",
         fluidRow(
           column(
             6,
             div(
-              style = "background-color: #fff3cd; padding: 12px; border-left: 4px solid #ffc107; margin-bottom: 12px; border-radius: 4px;",
-              h5("Time of Use (TOU)", style = "margin-top: 0; color: #856404;"),
+              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; margin-bottom: 12px; border-radius: 4px;",
+              h5("Time of Use (TOU)", style = "margin-top: 0; color: #495057; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0;",
+                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
                 tags$li(tags$strong("E-TOU-C:"), " Peak 4-9 PM"),
                 tags$li(tags$strong("E-TOU-D:"), " Peak 5-8 PM")
               )
             ),
             div(
-              style = "background-color: #d1ecf1; padding: 12px; border-left: 4px solid #17a2b8; border-radius: 4px;",
-              h5("Tiered Rates", style = "margin-top: 0; color: #0c5460;"),
+              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5("Tiered Rates", style = "margin-top: 0; color: #495057; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0;",
+                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
                 tags$li("T1: 100% baseline"),
                 tags$li("T2: 101-400% baseline"),
                 tags$li("T3: >400% baseline")
@@ -251,47 +271,55 @@ homeUI <- function(id, label = 'home'){
           column(
             6,
             div(
-              style = "background-color: #d4edda; padding: 12px; border-left: 4px solid #28a745; margin-bottom: 12px; border-radius: 4px;",
-              h5("EV Plans", style = "margin-top: 0; color: #155724;"),
+              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; margin-bottom: 12px; border-radius: 4px;",
+              h5("EV Plans", style = "margin-top: 0; color: #495057; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0;",
+                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
                 tags$li("EV2-A: Standard EV rate"),
                 tags$li("EV-B: Alternative EV rate")
               )
             ),
             div(
-              style = "background-color: #f8d7da; padding: 12px; border-left: 4px solid #dc3545; border-radius: 4px;",
-              h5("Solar & Renewable", style = "margin-top: 0; color: #721c24;"),
+              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; border-radius: 4px;",
+              h5("Solar & Renewable", style = "margin-top: 0; color: #495057; font-weight: 600;"),
               p(
-                style = "font-size: 13px; margin-bottom: 0;",
+                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
                 tags$em("Coming soon")
               )
             )
           )
         )
+        )
       ),
 
       # About Smart Meter Data - Collapsible
-      shinydashboard::box(
-        width = 12,
-        status = 'success',
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('lightbulb'), ' About Smart Meter Data (click to expand)'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Smart meters record your energy consumption at regular intervals (typically hourly). This granular data enables pattern recognition, cost optimization, anomaly detection, and informed decision-making for choosing the most cost-effective rate plan."
+      div(
+        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        div(
+          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          onclick = "$(this).next().slideToggle(200);",
+          tags$span(
+            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            icon('lightbulb'), ' About Smart Meter Data ',
+            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+          )
+        ),
+        div(
+          style = "display: none; padding: 20px;",
+          p(
+            style = "font-size: 14px; line-height: 1.6;",
+            "Smart meters record your energy consumption at regular intervals (typically hourly). This granular data enables pattern recognition, cost optimization, anomaly detection, and informed decision-making for choosing the most cost-effective rate plan."
+          )
         )
       ),
 
       # Footer / Call to Action
       div(
-        style = "background-color: #3498db; color: white; padding: 20px; border-radius: 5px; text-align: center;",
-        h3("Ready to Get Started?", style = "margin-top: 0;"),
+        style = "background-color: #f8f9fa; color: #495057; padding: 20px; border-radius: 4px; text-align: center; border: 1px solid #dee2e6;",
+        h3("Ready to Get Started?", style = "margin-top: 0; color: #212529; font-weight: 600;"),
         p(
-          style = "font-size: 16px;",
-          "Head to the Data tab to load your energy consumption data and begin exploring!"
+          style = "font-size: 16px; color: #6c757d;",
+          "Head to the ", tags$strong("Data tab"), " to load your energy consumption data and begin exploring!"
         )
       )
     )
