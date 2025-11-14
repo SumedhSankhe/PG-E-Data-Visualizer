@@ -11,8 +11,8 @@ qcUI <- function(id, label = 'qc') {
         status = 'info',
         solidHeader = FALSE,
         collapsible = TRUE,
-        collapsed = FALSE,
-        title = tags$span(icon('info-circle'), ' What does Quality Control do?'),
+        collapsed = TRUE,
+        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
         p(
           style = "font-size: 14px; line-height: 1.6;",
           "Quality Control validates your energy consumption data by checking for common issues like missing values, outliers, negative readings, and time gaps."

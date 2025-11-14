@@ -11,8 +11,8 @@ anomalyUI <- function(id, label = 'anomaly') {
         status = 'warning',
         solidHeader = FALSE,
         collapsible = TRUE,
-        collapsed = FALSE,
-        title = tags$span(icon('info-circle'), ' What does Anomaly Detection do?'),
+        collapsed = TRUE,
+        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
         p(
           style = "font-size: 14px; line-height: 1.6;",
           "Anomaly Detection identifies unusual consumption patterns that deviate significantly from your normal usage. This can help spot appliance malfunctions, unusual events, or data quality issues."

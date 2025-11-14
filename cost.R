@@ -11,8 +11,8 @@ costUI <- function(id, label = 'cost') {
         status = 'success',
         solidHeader = FALSE,
         collapsible = TRUE,
-        collapsed = FALSE,
-        title = tags$span(icon('info-circle'), ' What does Cost Optimization do?'),
+        collapsed = TRUE,
+        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
         p(
           style = "font-size: 14px; line-height: 1.6;",
           "Cost Optimization calculates your electricity costs under different PG&E rate plans and identifies opportunities to save money by adjusting your usage patterns or switching rate plans."
