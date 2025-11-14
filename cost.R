@@ -6,23 +6,32 @@ costUI <- function(id, label = 'cost') {
   fluidPage(
     # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        status = 'success',
-        solidHeader = FALSE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Cost Optimization calculates your electricity costs under different PG&E rate plans and identifies opportunities to save money by adjusting your usage patterns or switching rate plans."
-        ),
-        tags$ul(
-          style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("How it works:"), " Select a rate plan and configure its parameters (rates, peak hours, tier limits). Costs automatically recalculate as you adjust values."),
-          tags$li(tags$strong("Rate Plans:"), " Time of Use (different rates for peak/off-peak), Tiered (usage-based pricing), EV (optimized for electric vehicle charging), or Custom flat rates."),
-          tags$li(tags$strong("Key Insights:"), " Review the 'Rate Plan Comparison' chart to see which plan saves you the most money. Check 'Recommendations' for specific actions to reduce costs."),
-          tags$li(tags$strong("Tip:"), " If peak costs are high (>50%), consider shifting high-energy activities (laundry, dishwasher, EV charging) to off-peak hours.")
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #ef4444;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Cost Optimization calculates your electricity costs under different PG&E rate plans and identifies opportunities to save money by adjusting your usage patterns or switching rate plans."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Select a rate plan and configure its parameters (rates, peak hours, tier limits). Costs automatically recalculate as you adjust values."),
+              tags$li(tags$strong("Rate Plans:"), " Time of Use (different rates for peak/off-peak), Tiered (usage-based pricing), EV (optimized for electric vehicle charging), or Custom flat rates."),
+              tags$li(tags$strong("Key Insights:"), " Review the 'Rate Plan Comparison' chart to see which plan saves you the most money. Check 'Recommendations' for specific actions to reduce costs."),
+              tags$li(tags$strong("Tip:"), " If peak costs are high (>50%), consider shifting high-energy activities (laundry, dishwasher, EV charging) to off-peak hours.")
+            )
+          )
         )
       )
     ),

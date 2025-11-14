@@ -6,23 +6,32 @@ anomalyUI <- function(id, label = 'anomaly') {
   fluidPage(
     # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        status = 'warning',
-        solidHeader = FALSE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Anomaly Detection identifies unusual consumption patterns that deviate significantly from your normal usage. This can help spot appliance malfunctions, unusual events, or data quality issues."
-        ),
-        tags$ul(
-          style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("How it works:"), " Automatically detects anomalies when you select a method or adjust sensitivity. Results update in real-time."),
-          tags$li(tags$strong("Detection Methods:"), " IQR (statistical), Z-Score (standard deviation), STL (seasonal), Moving Average (trend-based)."),
-          tags$li(tags$strong("Sensitivity:"), " Lower values (1-3) = stricter detection, higher values (7-10) = more lenient. Start with 5."),
-          tags$li(tags$strong("Interpreting Results:"), " Critical anomalies need immediate attention. Medium anomalies may indicate unusual but not problematic behavior.")
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #f59e0b;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Anomaly Detection identifies unusual consumption patterns that deviate significantly from your normal usage. This can help spot appliance malfunctions, unusual events, or data quality issues."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Automatically detects anomalies when you select a method or adjust sensitivity. Results update in real-time."),
+              tags$li(tags$strong("Detection Methods:"), " IQR (statistical), Z-Score (standard deviation), STL (seasonal), Moving Average (trend-based)."),
+              tags$li(tags$strong("Sensitivity:"), " Lower values (1-3) = stricter detection, higher values (7-10) = more lenient. Start with 5."),
+              tags$li(tags$strong("Interpreting Results:"), " Critical anomalies need immediate attention. Medium anomalies may indicate unusual but not problematic behavior.")
+            )
+          )
         )
       )
     ),

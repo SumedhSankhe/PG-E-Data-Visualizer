@@ -6,22 +6,31 @@ qcUI <- function(id, label = 'qc') {
   fluidPage(
     # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        status = 'info',
-        solidHeader = FALSE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Quality Control validates your energy consumption data by checking for common issues like missing values, outliers, negative readings, and time gaps."
-        ),
-        tags$ul(
-          style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("What it does:"), " Automatically analyzes your data quality when you load data or change the date range."),
-          tags$li(tags$strong("What to look for:"), " A quality score above 90% indicates excellent data. Review any warnings or flags."),
-          tags$li(tags$strong("Next steps:"), " If quality issues are found, consider filtering problematic dates or fixing data issues before further analysis.")
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #10b981;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Quality Control validates your energy consumption data by checking for common issues like missing values, outliers, negative readings, and time gaps."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("What it does:"), " Automatically analyzes your data quality when you load data or change the date range."),
+              tags$li(tags$strong("What to look for:"), " A quality score above 90% indicates excellent data. Review any warnings or flags."),
+              tags$li(tags$strong("Next steps:"), " If quality issues are found, consider filtering problematic dates or fixing data issues before further analysis.")
+            )
+          )
         )
       )
     ),

@@ -7,27 +7,36 @@ loadUI <- function(id, label = 'loadData') {
   fluidPage(
     # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        status = 'info',
-        solidHeader = FALSE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Upload your PG&E smart meter data file (CSV or TSV format) or use the included sample dataset to explore the application."
-        ),
-        tags$ul(
-          style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("Required columns:"), " dttm_start (timestamp), hour (0-23), value (kWh), day, day2"),
-          tags$li(tags$strong("Timestamp format:"), " YYYY-MM-DD HH:MM:SS (e.g., 2024-01-01 14:00:00)"),
-          tags$li(tags$strong("No file?"), " The sample dataset will load automatically - perfect for trying out features!")
-        ),
-        p(
-          style = "font-size: 14px; line-height: 1.6; margin-top: 10px;",
-          tags$strong("Next step:"), " After loading data, use the ", tags$strong("sidebar date filter"),
-          " to select your analysis period, then proceed to Quality Control to verify data quality."
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #3b82f6;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Upload your PG&E smart meter data file (CSV or TSV format) or use the included sample dataset to explore the application."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("Required columns:"), " dttm_start (timestamp), hour (0-23), value (kWh), day, day2"),
+              tags$li(tags$strong("Timestamp format:"), " YYYY-MM-DD HH:MM:SS (e.g., 2024-01-01 14:00:00)"),
+              tags$li(tags$strong("No file?"), " The sample dataset will load automatically - perfect for trying out features!")
+            ),
+            p(
+              style = "font-size: 14px; line-height: 1.6; margin-top: 10px; color: #374151;",
+              tags$strong("Next step:"), " After loading data, use the ", tags$strong("sidebar date filter"),
+              " to select your analysis period, then proceed to Quality Control to verify data quality."
+            )
+          )
         )
       )
     ),
@@ -46,18 +55,18 @@ loadUI <- function(id, label = 'loadData') {
           ),
           div(style = 'margin-top:-10px'),
           tags$div(
-            style = "padding: 10px; background-color: #d1ecf1; border-radius: 5px; border-left: 3px solid #17a2b8;",
+            style = "padding: 10px; background-color: #ecfeff; border-radius: 4px; border-left: 3px solid #06b6d4;",
             tags$small(
-              style = "font-size: 13px;",
+              style = "font-size: 13px; color: #0e7490;",
               icon('lightbulb'), " ", tags$strong("Tip:"), " Accepted formats: CSV, TSV"
             )
           ),
           conditionalPanel(
             condition = sprintf("typeof input['%s'] === 'undefined' || input['%s'].length === 0", ns('localfile'), ns('localfile')),
             tags$div(
-              style = "margin-top: 15px; padding: 10px; background-color: #fff3cd; border-radius: 5px; border-left: 3px solid #ffc107;",
+              style = "margin-top: 15px; padding: 10px; background-color: #fef3c7; border-radius: 4px; border-left: 3px solid #f59e0b;",
               tags$small(
-                style = "font-size: 13px;",
+                style = "font-size: 13px; color: #92400e;",
                 icon('database'), " Using sample data: ", tags$code(basename(DEFAULT_DATA_FILE))
               )
             )
