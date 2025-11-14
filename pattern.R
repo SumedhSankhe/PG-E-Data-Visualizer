@@ -4,6 +4,29 @@ patternUI <- function(id, label = 'pattern') {
   h3('Pattern Recognition')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      shinydashboard::box(
+        width = 12,
+        status = 'info',
+        solidHeader = FALSE,
+        collapsible = TRUE,
+        collapsed = FALSE,
+        title = tags$span(icon('info-circle'), ' What does Pattern Recognition do?'),
+        p(
+          style = "font-size: 14px; line-height: 1.6;",
+          "Pattern Recognition discovers recurring consumption patterns in your energy usage across days, weeks, and seasons. This helps you understand your typical behavior and optimize usage schedules."
+        ),
+        tags$ul(
+          style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("Daily Patterns:"), " Shows your average hourly consumption profile across all days."),
+          tags$li(tags$strong("Weekly Patterns:"), " Compares usage across different days of the week (Monday through Sunday)."),
+          tags$li(tags$strong("Day Type Comparison:"), " Reveals differences between weekday and weekend consumption habits."),
+          tags$li(tags$strong("Load Curve Clustering:"), " Groups similar consumption days together to identify different usage modes (e.g., work-from-home vs away days).")
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(

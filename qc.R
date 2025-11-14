@@ -4,6 +4,28 @@ qcUI <- function(id, label = 'qc') {
   h3('Data Quality Control')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      shinydashboard::box(
+        width = 12,
+        status = 'info',
+        solidHeader = FALSE,
+        collapsible = TRUE,
+        collapsed = FALSE,
+        title = tags$span(icon('info-circle'), ' What does Quality Control do?'),
+        p(
+          style = "font-size: 14px; line-height: 1.6;",
+          "Quality Control validates your energy consumption data by checking for common issues like missing values, outliers, negative readings, and time gaps."
+        ),
+        tags$ul(
+          style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("How to use:"), " Click the 'Run QC Analysis' button to check your data quality."),
+          tags$li(tags$strong("What to look for:"), " A quality score above 90% indicates excellent data. Review any warnings or flags."),
+          tags$li(tags$strong("Next steps:"), " If quality issues are found, consider filtering problematic dates or fixing data issues before further analysis.")
+        )
+      )
+    ),
+
     # QC Controls
     fluidRow(
       shinydashboard::box(

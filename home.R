@@ -76,26 +76,162 @@ homeUI <- function(id, label = 'home'){
 
         div(
           style = "margin-bottom: 15px;",
-          h4("Step 2: Configure Analysis", style = "color: #2980b9;"),
+          h4("Step 2: Check Data Quality (Recommended)", style = "color: #2980b9;"),
           p(
             style = "font-size: 15px; margin-left: 20px;",
-            "Go to the", tags$strong("Analyse"), "tab and:"
+            "Go to the", tags$strong("Quality Control"), "tab to verify your data:"
           ),
           tags$ul(
             style = "font-size: 15px; margin-left: 40px;",
-            tags$li("Select your", tags$strong("rate plan type"), "(Time of Use, Tiered, EV Plan, etc.)"),
-            tags$li("Choose specific", tags$strong("tier options"), "based on your plan"),
-            tags$li("Set your", tags$strong("date range"), "to analyze specific periods"),
-            tags$li("For Time of Use plans, configure peak hours and pricing")
+            tags$li("Click", tags$strong("'Run QC Analysis'"), "to check for missing values, outliers, and data quality issues"),
+            tags$li("Review the quality score and fix any flagged issues if needed")
           )
         ),
 
         div(
-          h4("Step 3: Explore Visualizations", style = "color: #2980b9;"),
+          style = "margin-bottom: 15px;",
+          h4("Step 3: Analyze Your Data", style = "color: #2980b9;"),
+          p(
+            style = "font-size: 15px; margin-left: 20px;",
+            "Use the sidebar date filter and explore different analysis tabs:"
+          ),
           tags$ul(
             style = "font-size: 15px; margin-left: 40px;",
-            tags$li(tags$strong("Time Series Plot:"), " See how consumption varies by hour across multiple days"),
-            tags$li(tags$strong("Distribution Box Plot:"), " Identify typical usage ranges and outliers for each hour")
+            tags$li(tags$strong("Anomaly Detection:"), " Find unusual consumption spikes or drops"),
+            tags$li(tags$strong("Pattern Recognition:"), " Discover daily, weekly, or seasonal usage patterns"),
+            tags$li(tags$strong("Cost Optimization:"), " Compare rate plans and identify savings opportunities")
+          )
+        ),
+
+        div(
+          h4("Step 4: Take Action", style = "color: #2980b9;"),
+          tags$ul(
+            style = "font-size: 15px; margin-left: 40px;",
+            tags$li("Download reports for detailed analysis"),
+            tags$li("Use insights to shift usage to off-peak hours"),
+            tags$li("Choose the most cost-effective rate plan for your consumption pattern")
+          )
+        )
+      ),
+
+      # Workflow Guide
+      div(
+        style = "margin-bottom: 30px;",
+        h2("Recommended Workflow", style = "color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px;"),
+        fluidRow(
+          column(
+            3,
+            div(
+              style = "text-align: center; padding: 20px; background-color: #e8f4f8; border-radius: 10px; height: 100%;",
+              tags$div(style = "font-size: 50px; color: #3498db;", "1"),
+              h4("Load Data"),
+              p(style = "font-size: 13px;", "Upload your energy consumption data or use sample data")
+            )
+          ),
+          column(
+            3,
+            div(
+              style = "text-align: center; padding: 20px; background-color: #e8f8f5; border-radius: 10px; height: 100%;",
+              tags$div(style = "font-size: 50px; color: #27ae60;", "2"),
+              h4("Quality Check"),
+              p(style = "font-size: 13px;", "Verify data completeness and identify quality issues")
+            )
+          ),
+          column(
+            3,
+            div(
+              style = "text-align: center; padding: 20px; background-color: #fef5e7; border-radius: 10px; height: 100%;",
+              tags$div(style = "font-size: 50px; color: #f39c12;", "3"),
+              h4("Discover Patterns"),
+              p(style = "font-size: 13px;", "Detect anomalies and recognize usage patterns")
+            )
+          ),
+          column(
+            3,
+            div(
+              style = "text-align: center; padding: 20px; background-color: #fdeef4; border-radius: 10px; height: 100%;",
+              tags$div(style = "font-size: 50px; color: #e74c3c;", "4"),
+              h4("Optimize Costs"),
+              p(style = "font-size: 13px;", "Compare rate plans and find savings opportunities")
+            )
+          )
+        )
+      ),
+
+      # Analysis Features Explained
+      div(
+        style = "margin-bottom: 30px;",
+        h2("Analysis Features Explained", style = "color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px;"),
+
+        # Quality Control
+        div(
+          style = "margin-bottom: 20px; padding: 15px; background-color: #e8f8f5; border-left: 5px solid #27ae60; border-radius: 5px;",
+          h4(icon("check-circle"), " Quality Control", style = "color: #27ae60; margin-top: 0;"),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("What it does:"), " Validates your data quality by checking for missing values, outliers, negative consumption, and time gaps in your hourly data."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("When to use:"), " Always run this first after loading data to ensure your analysis is based on reliable data."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("Key metrics:"), " Data Quality Score (0-100%), missing values count, outliers detected, data completeness by hour."
+          )
+        ),
+
+        # Anomaly Detection
+        div(
+          style = "margin-bottom: 20px; padding: 15px; background-color: #fef5e7; border-left: 5px solid #f39c12; border-radius: 5px;",
+          h4(icon("exclamation-triangle"), " Anomaly Detection", style = "color: #f39c12; margin-top: 0;"),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("What it does:"), " Identifies unusual consumption patterns using statistical methods (IQR, Z-Score, Seasonal Decomposition, or Moving Average)."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("When to use:"), " To find unexpected spikes (appliance malfunctions, unusual events) or drops (missed readings) in your energy usage."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("Tip:"), " Adjust sensitivity (1-10) to control detection strictness. Lower values = more strict."
+          )
+        ),
+
+        # Pattern Recognition
+        div(
+          style = "margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-left: 5px solid #3498db; border-radius: 5px;",
+          h4(icon("chart-line"), " Pattern Recognition", style = "color: #3498db; margin-top: 0;"),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("What it does:"), " Discovers consumption patterns across daily, weekly, or seasonal cycles. Uses clustering to group similar usage days together."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("When to use:"), " To understand your typical usage habits, identify peak hours, and compare weekday vs weekend consumption."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("Pattern types:"), " Daily (average hourly pattern), Weekly (by day of week), Day Type (weekday vs weekend), Clustering (groups similar days)."
+          )
+        ),
+
+        # Cost Optimization
+        div(
+          style = "margin-bottom: 20px; padding: 15px; background-color: #fdeef4; border-left: 5px solid #e74c3c; border-radius: 5px;",
+          h4(icon("dollar-sign"), " Cost Optimization", style = "color: #e74c3c; margin-top: 0;"),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("What it does:"), " Calculates your energy costs under different PG&E rate plans and identifies potential savings by shifting usage to off-peak hours."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("When to use:"), " When choosing a rate plan or optimizing your consumption schedule to reduce electricity bills."
+          ),
+          p(
+            style = "font-size: 15px; line-height: 1.6;",
+            tags$strong("Supported plans:"), " Time of Use (TOU), Tiered rates, EV charging plans, and custom flat rates. Compare all plans side-by-side."
           )
         )
       ),
