@@ -155,7 +155,11 @@ patternServer <- function(id, dt) {
 
         # Pattern consistency (coefficient of variation)
         daily_totals <- df[, .(daily_total = sum(value, na.rm = TRUE)), by = start_date]
-        results$cv <- round(sd(daily_totals$daily_total, na.rm = TRUE) / mean(daily_totals$daily_total, na.rm = TRUE) * 100, 1)
+        mean_daily <- mean(daily_totals$daily_total, na.rm = TRUE)
+        sd_daily <- sd(daily_totals$daily_total, na.rm = TRUE)
+
+        # Use safe_divide to prevent division by zero
+        results$cv <- round(safe_divide(sd_daily, mean_daily) * 100, 1)
         results$consistency_score <- max(0, 100 - results$cv)
 
         # Weekend vs Weekday comparison
@@ -163,7 +167,8 @@ patternServer <- function(id, dt) {
         if (nrow(daytype_avg) == 2) {
           weekday_avg <- daytype_avg[day_type == "Weekday", avg_consumption]
           weekend_avg <- daytype_avg[day_type == "Weekend", avg_consumption]
-          results$weekend_diff_pct <- round((weekend_avg - weekday_avg) / weekday_avg * 100, 1)
+          # Use safe_divide to prevent division by zero
+          results$weekend_diff_pct <- round(safe_divide(weekend_avg - weekday_avg, weekday_avg) * 100, 1)
         } else {
           results$weekend_diff_pct <- 0
         }
@@ -494,6 +499,11 @@ patternServer <- function(id, dt) {
       # Pattern Statistics ----
       output$pattern_stats <- renderUI({
         results <- pattern_results()
+        df <- results$data
+
+        # Get actual date range from data
+        date_range_start <- min(as.Date(df$start_date))
+        date_range_end <- max(as.Date(df$start_date))
 
         stats_list <- tagList(
           tags$div(
@@ -501,7 +511,7 @@ patternServer <- function(id, dt) {
             tags$h4("Pattern Analysis Summary"),
             tags$hr(),
             tags$p(strong("Analysis Period: "),
-                   paste(input$dates[1], "to", input$dates[2])),
+                   paste(date_range_start, "to", date_range_end)),
             tags$p(strong("Total Days Analyzed: "), results$total_days),
             tags$p(strong("Average Daily Consumption: "),
                    paste(results$avg_daily_consumption, "kWh")),

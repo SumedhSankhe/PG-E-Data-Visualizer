@@ -295,6 +295,17 @@ costServer <- function(id, dt) {
           peak_rate <- input$peak_rate
           offpeak_rate <- input$offpeak_rate
 
+          # Validate peak hours
+          hours_validation <- validate_peak_hours(peak_start, peak_end, session)
+          validate(need(hours_validation$valid, paste(hours_validation$errors, collapse = "; ")))
+
+          # Validate rates
+          peak_rate_validation <- validate_rate(peak_rate, "Peak rate", session)
+          validate(need(peak_rate_validation$valid, peak_rate_validation$message))
+
+          offpeak_rate_validation <- validate_rate(offpeak_rate, "Off-peak rate", session)
+          validate(need(offpeak_rate_validation$valid, offpeak_rate_validation$message))
+
           df[, is_peak := hour >= peak_start & hour <= peak_end]
           df[, rate := ifelse(is_peak, peak_rate, offpeak_rate)]
           df[, cost := value * rate]
@@ -343,9 +354,9 @@ costServer <- function(id, dt) {
         # Overall statistics
         results$total_cost <- sum(df$cost, na.rm = TRUE)
         results$total_days <- length(unique(df$start_date))
-        results$avg_daily_cost <- results$total_cost / results$total_days
+        results$avg_daily_cost <- safe_divide(results$total_cost, results$total_days)
         results$total_consumption <- sum(df$value, na.rm = TRUE)
-        results$avg_rate <- results$total_cost / results$total_consumption
+        results$avg_rate <- safe_divide(results$total_cost, results$total_consumption)
 
         # Hourly cost analysis
         results$hourly_costs <- df[, .(
@@ -363,7 +374,7 @@ costServer <- function(id, dt) {
 
         # Peak cost percentage (for TOU plans)
         if (input$rate_plan == 'tou' || input$rate_plan == 'ev') {
-          results$peak_cost_pct <- round((results$peak_cost / results$total_cost) * 100, 1)
+          results$peak_cost_pct <- round(safe_percentage(results$peak_cost, results$total_cost), 1)
         } else {
           results$peak_cost_pct <- NA
         }
