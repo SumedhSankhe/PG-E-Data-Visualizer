@@ -5,24 +5,80 @@ DEFAULT_DATA_FILE <- file.path(DATA_DIR, "meterData.rds")
 loadUI <- function(id, label = 'loadData') {
   ns <- NS(id)
   fluidPage(
-    shinydashboard::box(
-      title = 'Data Upload', width = 3, status = 'primary',
-      fileInput(
-        inputId = ns('localfile'),
-        label = 'Upload meter data (.csv/.tsv)',
-        accept = c('.csv', '.tsv')
-      ),
-      div(style = 'margin-top:-10px'),
-      helpText("If no file provided, the bundled sample data is used."),
-      conditionalPanel(
-        condition = sprintf("typeof input['%s'] === 'undefined' || input['%s'].length === 0", ns('localfile'), ns('localfile')),
-        tags$small(paste0("Fallback: ", DEFAULT_DATA_FILE))
+    # Help Box
+    fluidRow(
+      shinydashboard::box(
+        width = 12,
+        status = 'info',
+        solidHeader = FALSE,
+        collapsible = TRUE,
+        collapsed = FALSE,
+        title = tags$span(icon('info-circle'), ' How to load your energy data'),
+        p(
+          style = "font-size: 14px; line-height: 1.6;",
+          "Upload your PG&E smart meter data file (CSV or TSV format) or use the included sample dataset to explore the application."
+        ),
+        tags$ul(
+          style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("Required columns:"), " dttm_start (timestamp), hour (0-23), value (kWh), day, day2"),
+          tags$li(tags$strong("Timestamp format:"), " YYYY-MM-DD HH:MM:SS (e.g., 2024-01-01 14:00:00)"),
+          tags$li(tags$strong("No file?"), " The sample dataset will load automatically - perfect for trying out features!")
+        ),
+        p(
+          style = "font-size: 14px; line-height: 1.6; margin-top: 10px;",
+          tags$strong("Next step:"), " After loading data, use the ", tags$strong("sidebar date filter"),
+          " to select your analysis period, then proceed to Quality Control to verify data quality."
+        )
       )
     ),
-    shinydashboard::box(
-      title = 'Data Table', width = 9, status = 'warning',
-      DT::dataTableOutput(outputId = ns('tableOutput')),
-      tags$small(textOutput(outputId = ns('dataMeta')))
+
+    fluidRow(
+      column(
+        width = 3,
+        shinydashboard::box(
+          title = 'Data Upload', width = 12, status = 'primary',
+          fileInput(
+            inputId = ns('localfile'),
+            label = tags$span(icon('upload'), ' Upload meter data'),
+            accept = c('.csv', '.tsv'),
+            buttonLabel = "Browse...",
+            placeholder = "No file selected"
+          ),
+          div(style = 'margin-top:-10px'),
+          tags$div(
+            style = "padding: 10px; background-color: #d1ecf1; border-radius: 5px; border-left: 3px solid #17a2b8;",
+            tags$small(
+              style = "font-size: 13px;",
+              icon('lightbulb'), " ", tags$strong("Tip:"), " Accepted formats: CSV, TSV"
+            )
+          ),
+          conditionalPanel(
+            condition = sprintf("typeof input['%s'] === 'undefined' || input['%s'].length === 0", ns('localfile'), ns('localfile')),
+            tags$div(
+              style = "margin-top: 15px; padding: 10px; background-color: #fff3cd; border-radius: 5px; border-left: 3px solid #ffc107;",
+              tags$small(
+                style = "font-size: 13px;",
+                icon('database'), " Using sample data: ", tags$code(basename(DEFAULT_DATA_FILE))
+              )
+            )
+          )
+        )
+      ),
+      column(
+        width = 9,
+        shinydashboard::box(
+          title = tags$span(icon('table'), ' Data Preview'),
+          width = 12,
+          status = 'warning',
+          DT::dataTableOutput(outputId = ns('tableOutput')),
+          tags$hr(),
+          tags$div(
+            style = "padding: 10px;",
+            tags$strong(icon('info-circle'), " Dataset Info: "),
+            textOutput(outputId = ns('dataMeta'), inline = TRUE)
+          )
+        )
+      )
     )
   )
 }

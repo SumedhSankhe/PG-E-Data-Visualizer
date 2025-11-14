@@ -4,6 +4,28 @@ anomalyUI <- function(id, label = 'anomaly') {
   h3('Anomaly Detection')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      shinydashboard::box(
+        width = 12,
+        status = 'warning',
+        solidHeader = FALSE,
+        collapsible = TRUE,
+        collapsed = FALSE,
+        title = tags$span(icon('info-circle'), ' What does Anomaly Detection do?'),
+        p(
+          style = "font-size: 14px; line-height: 1.6;",
+          "Anomaly Detection identifies unusual consumption patterns that deviate significantly from your normal usage. This can help spot appliance malfunctions, unusual events, or data quality issues."
+        ),
+        tags$ul(
+          style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("Detection Methods:"), " IQR (statistical), Z-Score (standard deviation), STL (seasonal), Moving Average (trend-based)."),
+          tags$li(tags$strong("Sensitivity:"), " Lower values (1-3) = stricter detection, higher values (7-10) = more lenient. Start with 5."),
+          tags$li(tags$strong("Interpreting Results:"), " Critical anomalies need immediate attention. Medium anomalies may indicate unusual but not problematic behavior.")
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(

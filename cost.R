@@ -4,6 +4,29 @@ costUI <- function(id, label = 'cost') {
   h3('Cost Optimization')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      shinydashboard::box(
+        width = 12,
+        status = 'success',
+        solidHeader = FALSE,
+        collapsible = TRUE,
+        collapsed = FALSE,
+        title = tags$span(icon('info-circle'), ' What does Cost Optimization do?'),
+        p(
+          style = "font-size: 14px; line-height: 1.6;",
+          "Cost Optimization calculates your electricity costs under different PG&E rate plans and identifies opportunities to save money by adjusting your usage patterns or switching rate plans."
+        ),
+        tags$ul(
+          style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("How to use:"), " Select a rate plan, configure its parameters (rates, peak hours, tier limits), and click 'Calculate Costs'."),
+          tags$li(tags$strong("Rate Plans:"), " Time of Use (different rates for peak/off-peak), Tiered (usage-based pricing), EV (optimized for electric vehicle charging), or Custom flat rates."),
+          tags$li(tags$strong("Key Insights:"), " Review the 'Rate Plan Comparison' chart to see which plan saves you the most money. Check 'Recommendations' for specific actions to reduce costs."),
+          tags$li(tags$strong("Tip:"), " If peak costs are high (>50%), consider shifting high-energy activities (laundry, dishwasher, EV charging) to off-peak hours.")
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(
