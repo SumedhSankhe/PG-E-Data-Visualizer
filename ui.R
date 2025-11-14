@@ -23,7 +23,19 @@ shinyUI(
       ),
       hr(),
       div(style = "padding: 10px;",
-          uiOutput('global_date_range')
+          uiOutput('global_date_range'),
+          br(),
+          downloadButton(
+            outputId = 'download_complete_report',
+            label = 'Download All Reports',
+            class = 'btn-success btn-block',
+            style = 'margin-top: 10px; font-size: 13px;',
+            icon = icon('file-excel')
+          ),
+          tags$small(
+            style = "display: block; margin-top: 5px; color: #6c757d; text-align: center;",
+            "Excel workbook with all analyses"
+          )
       )
     ),
     body = shinydashboard::dashboardBody(
