@@ -25,17 +25,50 @@ shinyUI(
       div(style = "padding: 10px;",
           uiOutput('global_date_range'),
           br(),
-          downloadButton(
-            outputId = 'download_complete_report',
-            label = 'Download All Reports',
-            class = 'btn-success btn-block',
-            style = 'margin-top: 10px; font-size: 13px;',
-            icon = icon('file-excel')
-          ),
-          tags$small(
-            style = "display: block; margin-top: 5px; color: #6c757d; text-align: center;",
-            "Excel workbook with all analyses"
+          div(
+            style = "text-align: center;",
+            downloadButton(
+              outputId = 'download_complete_report',
+              label = 'Download All Reports',
+              icon = icon('file-excel')
+            ),
+            tags$small(
+              style = "display: block; margin-top: 8px; color: #9ca3af; font-size: 11px;",
+              "Excel with all analyses"
+            )
           )
+      ),
+      # Custom CSS for download button
+      tags$head(
+        tags$style(HTML("
+          #download_complete_report {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+            margin-top: 10px;
+          }
+          #download_complete_report:hover:enabled {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transform: translateY(-1px);
+          }
+          #download_complete_report:disabled {
+            background: #4b5563;
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+          }
+          #download_complete_report i {
+            margin-right: 6px;
+          }
+        "))
       )
     ),
     body = shinydashboard::dashboardBody(
