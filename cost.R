@@ -19,7 +19,7 @@ costUI <- function(id, label = 'cost') {
         ),
         tags$ul(
           style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("How to use:"), " Select a rate plan, configure its parameters (rates, peak hours, tier limits), and click 'Calculate Costs'."),
+          tags$li(tags$strong("How it works:"), " Select a rate plan and configure its parameters (rates, peak hours, tier limits). Costs automatically recalculate as you adjust values."),
           tags$li(tags$strong("Rate Plans:"), " Time of Use (different rates for peak/off-peak), Tiered (usage-based pricing), EV (optimized for electric vehicle charging), or Custom flat rates."),
           tags$li(tags$strong("Key Insights:"), " Review the 'Rate Plan Comparison' chart to see which plan saves you the most money. Check 'Recommendations' for specific actions to reduce costs."),
           tags$li(tags$strong("Tip:"), " If peak costs are high (>50%), consider shifting high-energy activities (laundry, dishwasher, EV charging) to off-peak hours.")
@@ -48,16 +48,7 @@ costUI <- function(id, label = 'cost') {
                  ))
         ),
         # Dynamic Rate Plan Inputs (server-side rendered)
-        uiOutput(ns('rate_plan_inputs')),
-        # Calculate Button Row
-        fluidRow(
-          column(width = 12, align = 'center',
-                 actionButton(inputId = ns('calculate_cost'),
-                              label = 'Calculate Costs',
-                              icon = icon('calculator'),
-                              class = 'btn-primary btn-lg',
-                              style = 'margin-top: 15px; width: 50%;'))
-        )
+        uiOutput(ns('rate_plan_inputs'))
       )
     ),
 
@@ -276,7 +267,6 @@ costServer <- function(id, dt) {
 
       # Cost Calculation Reactive ----
       cost_results <- reactive({
-        input$calculate_cost
         req(dt())
         req(input$rate_plan)
 

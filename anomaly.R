@@ -19,6 +19,7 @@ anomalyUI <- function(id, label = 'anomaly') {
         ),
         tags$ul(
           style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("How it works:"), " Automatically detects anomalies when you select a method or adjust sensitivity. Results update in real-time."),
           tags$li(tags$strong("Detection Methods:"), " IQR (statistical), Z-Score (standard deviation), STL (seasonal), Moving Average (trend-based)."),
           tags$li(tags$strong("Sensitivity:"), " Lower values (1-3) = stricter detection, higher values (7-10) = more lenient. Start with 5."),
           tags$li(tags$strong("Interpreting Results:"), " Critical anomalies need immediate attention. Medium anomalies may indicate unusual but not problematic behavior.")
@@ -51,13 +52,7 @@ anomalyUI <- function(id, label = 'anomaly') {
                  min = 1,
                  max = 10,
                  step = 1
-               )),
-        column(width = 4,
-               actionButton(inputId = ns('run_detection'),
-                            label = 'Detect Anomalies',
-                            icon = icon('search'),
-                            class = 'btn-primary btn-lg',
-                            style = 'margin-top: 25px;'))
+               ))
       )
     ),
 
@@ -135,7 +130,6 @@ anomalyServer <- function(id, dt) {
 
       # Anomaly Detection Reactive ----
       anomaly_results <- reactive({
-        input$run_detection
         req(dt())
         req(input$detection_method)
         req(input$sensitivity)

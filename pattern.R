@@ -19,6 +19,7 @@ patternUI <- function(id, label = 'pattern') {
         ),
         tags$ul(
           style = "font-size: 14px; line-height: 1.6;",
+          tags$li(tags$strong("How it works:"), " Select a pattern type to automatically analyze your consumption patterns. Results update instantly."),
           tags$li(tags$strong("Daily Patterns:"), " Shows your average hourly consumption profile across all days."),
           tags$li(tags$strong("Weekly Patterns:"), " Compares usage across different days of the week (Monday through Sunday)."),
           tags$li(tags$strong("Day Type Comparison:"), " Reveals differences between weekday and weekend consumption habits."),
@@ -52,13 +53,7 @@ patternUI <- function(id, label = 'pattern') {
                  min = 2,
                  max = 7,
                  step = 1
-               )),
-        column(width = 4,
-               actionButton(inputId = ns('run_analysis'),
-                            label = 'Analyze Patterns',
-                            icon = icon('chart-line'),
-                            class = 'btn-primary btn-lg',
-                            style = 'margin-top: 25px;'))
+               ))
       )
     ),
 
@@ -135,7 +130,6 @@ patternServer <- function(id, dt) {
 
       # Pattern Analysis Reactive ----
       pattern_results <- reactive({
-        input$run_analysis
         req(dt())
         req(input$pattern_type)
 

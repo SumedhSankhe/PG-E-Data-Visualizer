@@ -19,7 +19,7 @@ qcUI <- function(id, label = 'qc') {
         ),
         tags$ul(
           style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("How to use:"), " Click the 'Run QC Analysis' button to check your data quality."),
+          tags$li(tags$strong("What it does:"), " Automatically analyzes your data quality when you load data or change the date range."),
           tags$li(tags$strong("What to look for:"), " A quality score above 90% indicates excellent data. Review any warnings or flags."),
           tags$li(tags$strong("Next steps:"), " If quality issues are found, consider filtering problematic dates or fixing data issues before further analysis.")
         )
@@ -31,12 +31,7 @@ qcUI <- function(id, label = 'qc') {
       shinydashboard::box(
         width = 12,
         title = 'QC Controls', status = 'primary', solidHeader = TRUE,
-        column(width = 6,
-               actionButton(inputId = ns('run_qc'),
-                            label = 'Run QC Analysis',
-                            icon = icon('play'),
-                            class = 'btn-primary btn-lg')),
-        column(width = 6,
+        column(width = 12, align = 'center',
                downloadButton(ns('download_qc_report'),
                               label = 'Download QC Report',
                               class = 'btn-success btn-lg'))
@@ -122,8 +117,7 @@ qcServer <- function(id, dt) {
 
       # QC Analysis Reactive ----
       qc_results <- reactive({
-        # Trigger on button click OR when data changes
-        input$run_qc
+        # Auto-run when data changes
         req(dt())
         logger::log_info("Running QC analysis on globally filtered data")
 
