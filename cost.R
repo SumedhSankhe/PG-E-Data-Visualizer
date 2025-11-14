@@ -133,12 +133,7 @@ costUI <- function(id, label = 'cost') {
                  )),
           column(width = 4,
                  h4('Cost Summary Table'),
-                 DT::dataTableOutput(ns('cost_summary_table')),
-                 br(),
-                 downloadButton(ns('download_cost_report'),
-                                label = 'Download Cost Report',
-                                class = 'btn-success btn-lg',
-                                style = 'width: 100%;'))
+                 DT::dataTableOutput(ns('cost_summary_table')))
         )
       )
     )
@@ -745,29 +740,6 @@ costServer <- function(id, dt) {
             backgroundColor = DT::styleInterval(c(0), c('#FFE6E6', '#E6FFE6'))
           )
       })
-
-      # Download Handler ----
-      output$download_cost_report <- downloadHandler(
-        filename = function() {
-          paste0("Cost_Analysis_", input$rate_plan, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- cost_results()
-
-          # Create comprehensive report
-          report <- results$data_with_cost[, .(
-            Timestamp = dttm_start,
-            Hour = hour,
-            Consumption_kWh = value,
-            Rate_Applied = rate,
-            Cost = cost,
-            Date = start_date
-          )][order(Timestamp)]
-
-          write.csv(report, file, row.names = FALSE)
-          logger::log_info("Cost report downloaded: {input$rate_plan} plan")
-        }
-      )
 
     }
   )

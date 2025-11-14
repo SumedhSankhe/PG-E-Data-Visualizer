@@ -121,10 +121,6 @@ anomalyUI <- function(id, label = 'anomaly') {
         title = 'Detected Anomalies - Detailed View',
         status = 'warning',
         solidHeader = TRUE,
-        downloadButton(ns('download_anomalies'),
-                       label = 'Download Anomaly Report',
-                       class = 'btn-success',
-                       style = 'margin-bottom: 10px;'),
         DT::dataTableOutput(ns('anomaly_table'))
       )
     )
@@ -572,30 +568,6 @@ anomalyServer <- function(id, dt) {
             )
         }
       })
-
-      # Download Handler ----
-      output$download_anomalies <- downloadHandler(
-        filename = function() {
-          paste0("Anomaly_Report_", input$detection_method, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- anomaly_results()
-
-          report_data <- results$data[is_anomaly == TRUE, .(
-            Timestamp = dttm_start,
-            Value = value,
-            Expected_Range_Lower = expected_range_lower,
-            Expected_Range_Upper = expected_range_upper,
-            Anomaly_Score = anomaly_score,
-            Severity = severity,
-            Detection_Method = results$method,
-            Sensitivity = results$sensitivity
-          )][order(-Anomaly_Score)]
-
-          write.csv(report_data, file, row.names = FALSE)
-          logger::log_info("Anomaly report downloaded: {results$method} method, {nrow(report_data)} anomalies")
-        }
-      )
 
     }
   )
