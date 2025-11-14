@@ -4,20 +4,34 @@ qcUI <- function(id, label = 'qc') {
   h3('Data Quality Control')
   shinyjs::useShinyjs()
   fluidPage(
-    # QC Controls
+    # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        title = 'QC Controls', status = 'primary', solidHeader = TRUE,
-        column(width = 6,
-               actionButton(inputId = ns('run_qc'),
-                            label = 'Run QC Analysis',
-                            icon = icon('play'),
-                            class = 'btn-primary btn-lg')),
-        column(width = 6,
-               downloadButton(ns('download_qc_report'),
-                              label = 'Download QC Report',
-                              class = 'btn-success btn-lg'))
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #10b981;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Quality Control validates your energy consumption data by checking for common issues like missing values, outliers, negative readings, and time gaps."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("What it does:"), " Automatically analyzes your data quality when you load data or change the date range."),
+              tags$li(tags$strong("What to look for:"), " A quality score above 90% indicates excellent data. Review any warnings or flags."),
+              tags$li(tags$strong("Next steps:"), " If quality issues are found, consider filtering problematic dates or fixing data issues before further analysis.")
+            )
+          )
+        )
       )
     ),
 
@@ -100,8 +114,7 @@ qcServer <- function(id, dt) {
 
       # QC Analysis Reactive ----
       qc_results <- reactive({
-        # Trigger on button click OR when data changes
-        input$run_qc
+        # Auto-run when data changes
         req(dt())
         logger::log_info("Running QC analysis on globally filtered data")
 
@@ -469,41 +482,6 @@ qcServer <- function(id, dt) {
             displaylogo = FALSE
           )
       })
-
-      # Download QC Report ----
-      output$download_qc_report <- downloadHandler(
-        filename = function() {
-          paste0("QC_Report_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          qc <- qc_results()
-
-          report <- data.frame(
-            Section = c(rep("Overview", 2), rep("Statistics", 5), rep("Quality Checks", 5)),
-            Metric = c("Date Range", "Total Records",
-                       "Mean (kWh)", "Median (kWh)", "Min (kWh)", "Max (kWh)", "Std Dev",
-                       "Missing Values", "Outliers", "Negative Values", "Zero Values",
-                       "Data Quality Score (%)"),
-            Value = c(
-              qc$date_range,
-              qc$total_records,
-              qc$mean_value,
-              qc$median_value,
-              qc$min_value,
-              qc$max_value,
-              qc$sd_value,
-              paste0(qc$missing_values, " (", qc$missing_pct, "%)"),
-              paste0(qc$outliers, " (", qc$outlier_pct, "%)"),
-              qc$negative_values,
-              paste0(qc$zero_values, " (", qc$zero_pct, "%)"),
-              round(qc$quality_score, 1)
-            )
-          )
-
-          write.csv(report, file, row.names = FALSE)
-          logger::log_info("QC report downloaded")
-        }
-      )
 
     }
   )
