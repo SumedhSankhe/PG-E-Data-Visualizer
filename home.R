@@ -57,43 +57,43 @@ homeUI <- function(id, label = 'home'){
 
       # Quick Start Guide - Compact version
       div(
-        style = "margin-bottom: 20px; background-color: #f8f9fa; padding: 20px; border-radius: 4px; border: 1px solid #dee2e6;",
+        style = "margin-bottom: 20px; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); padding: 20px; border-radius: 4px; border: 1px solid #dee2e6;",
         h2("Quick Start Guide", style = "color: #212529; margin-top: 0; font-size: 22px; font-weight: 600;"),
         fluidRow(
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
-              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "1"),
-              h5("Load Data", style = "margin: 5px 0; color: #495057;"),
-              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Data tab → Upload CSV/TSV")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 2px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.1);",
+              tags$div(style = "font-size: 36px; color: #3b82f6; font-weight: 600;", "1"),
+              h5("Load Data", style = "margin: 5px 0; color: #374151;"),
+              p(style = "font-size: 12px; margin: 0; color: #6b7280;", "Data tab → Upload CSV/TSV")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
-              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "2"),
-              h5("Quality Check", style = "margin: 5px 0; color: #495057;"),
-              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "QC tab → Run QC Analysis")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 2px solid #10b981; box-shadow: 0 1px 3px rgba(0,0,0,0.1);",
+              tags$div(style = "font-size: 36px; color: #10b981; font-weight: 600;", "2"),
+              h5("Quality Check", style = "margin: 5px 0; color: #374151;"),
+              p(style = "font-size: 12px; margin: 0; color: #6b7280;", "QC tab → Run QC Analysis")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
-              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "3"),
-              h5("Analyze", style = "margin: 5px 0; color: #495057;"),
-              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Explore patterns & anomalies")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 2px solid #f59e0b; box-shadow: 0 1px 3px rgba(0,0,0,0.1);",
+              tags$div(style = "font-size: 36px; color: #f59e0b; font-weight: 600;", "3"),
+              h5("Analyze", style = "margin: 5px 0; color: #374151;"),
+              p(style = "font-size: 12px; margin: 0; color: #6b7280;", "Explore patterns & anomalies")
             )
           ),
           column(
             3,
             div(
-              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 1px solid #dee2e6;",
-              tags$div(style = "font-size: 36px; color: #6c757d; font-weight: 600;", "4"),
-              h5("Optimize", style = "margin: 5px 0; color: #495057;"),
-              p(style = "font-size: 12px; margin: 0; color: #6c757d;", "Compare rate plans & save")
+              style = "text-align: center; padding: 15px; background-color: #ffffff; border-radius: 4px; border: 2px solid #ef4444; box-shadow: 0 1px 3px rgba(0,0,0,0.1);",
+              tags$div(style = "font-size: 36px; color: #ef4444; font-weight: 600;", "4"),
+              h5("Optimize", style = "margin: 5px 0; color: #374151;"),
+              p(style = "font-size: 12px; margin: 0; color: #6b7280;", "Compare rate plans & save")
             )
           )
         ),
@@ -105,14 +105,14 @@ homeUI <- function(id, label = 'home'){
 
       # Analysis Features Explained - Collapsible
       div(
-        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
         div(
-          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          style = "padding: 12px 20px; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
           onclick = "$(this).next().slideToggle(200);",
           tags$span(
-            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            style = "font-size: 15px; font-weight: 500; color: #3b82f6;",
             icon('book'), ' Analysis Features Guide ',
-            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+            tags$span(style = "color: #6b7280; font-size: 13px; font-weight: normal;", "(click to expand)")
           )
         ),
         div(
@@ -122,8 +122,8 @@ homeUI <- function(id, label = 'home'){
             6,
             # Quality Control
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5(icon("check-circle"), " Quality Control", style = "color: #495057; margin-top: 0; font-weight: 600;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #f0fdf4; border-left: 3px solid #10b981; border-radius: 4px;",
+              h5(icon("check-circle", style = "color: #10b981;"), " Quality Control", style = "color: #374151; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Validates data quality (missing values, outliers, gaps)"),
@@ -133,8 +133,8 @@ homeUI <- function(id, label = 'home'){
             ),
             # Pattern Recognition
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5(icon("chart-line"), " Pattern Recognition", style = "color: #495057; margin-top: 0; font-weight: 600;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #ecfeff; border-left: 3px solid #06b6d4; border-radius: 4px;",
+              h5(icon("chart-line", style = "color: #06b6d4;"), " Pattern Recognition", style = "color: #374151; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Discovers daily, weekly, and seasonal patterns"),
@@ -147,8 +147,8 @@ homeUI <- function(id, label = 'home'){
             6,
             # Anomaly Detection
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5(icon("exclamation-triangle"), " Anomaly Detection", style = "color: #495057; margin-top: 0; font-weight: 600;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 4px;",
+              h5(icon("exclamation-triangle", style = "color: #f59e0b;"), " Anomaly Detection", style = "color: #374151; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Finds unusual consumption spikes/drops"),
@@ -158,8 +158,8 @@ homeUI <- function(id, label = 'home'){
             ),
             # Cost Optimization
             div(
-              style = "margin-bottom: 15px; padding: 12px; background-color: #f8f9fa; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5(icon("dollar-sign"), " Cost Optimization", style = "color: #495057; margin-top: 0; font-weight: 600;"),
+              style = "margin-bottom: 15px; padding: 12px; background-color: #fef2f2; border-left: 3px solid #ef4444; border-radius: 4px;",
+              h5(icon("dollar-sign", style = "color: #ef4444;"), " Cost Optimization", style = "color: #374151; margin-top: 0; font-weight: 600;"),
               tags$ul(
                 style = "font-size: 13px; margin-bottom: 0;",
                 tags$li(tags$strong("What:"), " Calculates costs under different rate plans"),
@@ -174,14 +174,14 @@ homeUI <- function(id, label = 'home'){
 
       # Data Format Requirements - Collapsible
       div(
-        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
         div(
-          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          style = "padding: 12px 20px; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
           onclick = "$(this).next().slideToggle(200);",
           tags$span(
-            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            style = "font-size: 15px; font-weight: 500; color: #6366f1;",
             icon('file-alt'), ' Data Format Requirements ',
-            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+            tags$span(style = "color: #6b7280; font-size: 13px; font-weight: normal;", "(click to expand)")
           )
         ),
         div(
@@ -233,14 +233,14 @@ homeUI <- function(id, label = 'home'){
 
       # Rate Plans Section - Collapsible
       div(
-        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
         div(
-          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          style = "padding: 12px 20px; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
           onclick = "$(this).next().slideToggle(200);",
           tags$span(
-            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            style = "font-size: 15px; font-weight: 500; color: #8b5cf6;",
             icon('bolt'), ' Understanding PG&E Rate Plans ',
-            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+            tags$span(style = "color: #6b7280; font-size: 13px; font-weight: normal;", "(click to expand)")
           )
         ),
         div(
@@ -249,19 +249,19 @@ homeUI <- function(id, label = 'home'){
           column(
             6,
             div(
-              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; margin-bottom: 12px; border-radius: 4px;",
-              h5("Time of Use (TOU)", style = "margin-top: 0; color: #495057; font-weight: 600;"),
+              style = "background-color: #dbeafe; padding: 12px; border-left: 3px solid #3b82f6; margin-bottom: 12px; border-radius: 4px;",
+              h5("Time of Use (TOU)", style = "margin-top: 0; color: #1e3a8a; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
+                style = "font-size: 13px; margin-bottom: 0; color: #1e40af;",
                 tags$li(tags$strong("E-TOU-C:"), " Peak 4-9 PM"),
                 tags$li(tags$strong("E-TOU-D:"), " Peak 5-8 PM")
               )
             ),
             div(
-              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5("Tiered Rates", style = "margin-top: 0; color: #495057; font-weight: 600;"),
+              style = "background-color: #f0fdf4; padding: 12px; border-left: 3px solid #10b981; border-radius: 4px;",
+              h5("Tiered Rates", style = "margin-top: 0; color: #065f46; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
+                style = "font-size: 13px; margin-bottom: 0; color: #047857;",
                 tags$li("T1: 100% baseline"),
                 tags$li("T2: 101-400% baseline"),
                 tags$li("T3: >400% baseline")
@@ -271,19 +271,19 @@ homeUI <- function(id, label = 'home'){
           column(
             6,
             div(
-              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; margin-bottom: 12px; border-radius: 4px;",
-              h5("EV Plans", style = "margin-top: 0; color: #495057; font-weight: 600;"),
+              style = "background-color: #fef3c7; padding: 12px; border-left: 3px solid #f59e0b; margin-bottom: 12px; border-radius: 4px;",
+              h5("EV Plans", style = "margin-top: 0; color: #92400e; font-weight: 600;"),
               tags$ul(
-                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
+                style = "font-size: 13px; margin-bottom: 0; color: #b45309;",
                 tags$li("EV2-A: Standard EV rate"),
                 tags$li("EV-B: Alternative EV rate")
               )
             ),
             div(
-              style = "background-color: #f8f9fa; padding: 12px; border-left: 3px solid #6c757d; border-radius: 4px;",
-              h5("Solar & Renewable", style = "margin-top: 0; color: #495057; font-weight: 600;"),
+              style = "background-color: #fae8ff; padding: 12px; border-left: 3px solid #a855f7; border-radius: 4px;",
+              h5("Solar & Renewable", style = "margin-top: 0; color: #581c87; font-weight: 600;"),
               p(
-                style = "font-size: 13px; margin-bottom: 0; color: #6c757d;",
+                style = "font-size: 13px; margin-bottom: 0; color: #6b21a8;",
                 tags$em("Coming soon")
               )
             )
@@ -294,14 +294,14 @@ homeUI <- function(id, label = 'home'){
 
       # About Smart Meter Data - Collapsible
       div(
-        style = "margin-bottom: 20px; border: 1px solid #dee2e6; border-radius: 4px; background-color: #ffffff;",
+        style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
         div(
-          style = "padding: 12px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; cursor: pointer; border-radius: 4px 4px 0 0;",
+          style = "padding: 12px 20px; background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
           onclick = "$(this).next().slideToggle(200);",
           tags$span(
-            style = "font-size: 15px; font-weight: 500; color: #495057;",
+            style = "font-size: 15px; font-weight: 500; color: #eab308;",
             icon('lightbulb'), ' About Smart Meter Data ',
-            tags$span(style = "color: #6c757d; font-size: 13px; font-weight: normal;", "(click to expand)")
+            tags$span(style = "color: #6b7280; font-size: 13px; font-weight: normal;", "(click to expand)")
           )
         ),
         div(
@@ -315,10 +315,10 @@ homeUI <- function(id, label = 'home'){
 
       # Footer / Call to Action
       div(
-        style = "background-color: #f8f9fa; color: #495057; padding: 20px; border-radius: 4px; text-align: center; border: 1px solid #dee2e6;",
-        h3("Ready to Get Started?", style = "margin-top: 0; color: #212529; font-weight: 600;"),
+        style = "background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); color: #1e40af; padding: 20px; border-radius: 4px; text-align: center; border: 1px solid #3b82f6;",
+        h3("Ready to Get Started?", style = "margin-top: 0; color: #1e3a8a; font-weight: 600;"),
         p(
-          style = "font-size: 16px; color: #6c757d;",
+          style = "font-size: 16px; color: #1e40af;",
           "Head to the ", tags$strong("Data tab"), " to load your energy consumption data and begin exploring!"
         )
       )
