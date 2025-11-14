@@ -1,0 +1,29 @@
+Package: PGEDataVisualizer
+Type: ShinyApp
+Title: PG&E Energy Data Analytics Dashboard
+Version: 1.0.0
+Authors@R: person("Developer", "Team", email = "dev@example.com", role = c("aut", "cre"))
+Description: Interactive Shiny dashboard for analyzing PG&E energy consumption data.
+    Provides quality control, anomaly detection, pattern recognition, and cost optimization
+    analysis capabilities for energy usage patterns.
+License: MIT
+Depends:
+    R (>= 4.0.0)
+Imports:
+    shiny,
+    shinydashboard,
+    data.table,
+    ggplot2,
+    plotly,
+    DT,
+    shinycssloaders,
+    shinyjs,
+    openxlsx,
+    logger
+Suggests:
+    testthat,
+    lintr,
+    styler,
+    covr
+Encoding: UTF-8
+LazyData: true
