@@ -4,6 +4,39 @@ patternUI <- function(id, label = 'pattern') {
   h3('Pattern Recognition')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      column(
+        width = 12,
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #6366f1;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Pattern Recognition discovers recurring consumption patterns in your energy usage across days, weeks, and seasons. This helps you understand your typical behavior and optimize usage schedules."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Select a pattern type to automatically analyze your consumption patterns. Results update instantly."),
+              tags$li(tags$strong("Daily Patterns:"), " Shows your average hourly consumption profile across all days."),
+              tags$li(tags$strong("Weekly Patterns:"), " Compares usage across different days of the week (Monday through Sunday)."),
+              tags$li(tags$strong("Day Type Comparison:"), " Reveals differences between weekday and weekend consumption habits."),
+              tags$li(tags$strong("Load Curve Clustering:"), " Groups similar consumption days together to identify different usage modes (e.g., work-from-home vs away days).")
+            )
+          )
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(
@@ -29,13 +62,7 @@ patternUI <- function(id, label = 'pattern') {
                  min = 2,
                  max = 7,
                  step = 1
-               )),
-        column(width = 4,
-               actionButton(inputId = ns('run_analysis'),
-                            label = 'Analyze Patterns',
-                            icon = icon('chart-line'),
-                            class = 'btn-primary btn-lg',
-                            style = 'margin-top: 25px;'))
+               ))
       )
     ),
 
@@ -87,20 +114,7 @@ patternUI <- function(id, label = 'pattern') {
     ),
 
     # Clustering Results (conditional - single box)
-    uiOutput(ns('clustering_box')),
-
-    # Download Section
-    fluidRow(
-      shinydashboard::box(
-        width = 12,
-        title = 'Pattern Analysis Report',
-        status = 'success',
-        solidHeader = TRUE,
-        downloadButton(ns('download_report'),
-                       label = 'Download Pattern Report',
-                       class = 'btn-success btn-lg')
-      )
-    )
+    uiOutput(ns('clustering_box'))
   )
 }
 
@@ -112,7 +126,6 @@ patternServer <- function(id, dt) {
 
       # Pattern Analysis Reactive ----
       pattern_results <- reactive({
-        input$run_analysis
         req(dt())
         req(input$pattern_type)
 
@@ -142,7 +155,11 @@ patternServer <- function(id, dt) {
 
         # Pattern consistency (coefficient of variation)
         daily_totals <- df[, .(daily_total = sum(value, na.rm = TRUE)), by = start_date]
-        results$cv <- round(sd(daily_totals$daily_total, na.rm = TRUE) / mean(daily_totals$daily_total, na.rm = TRUE) * 100, 1)
+        mean_daily <- mean(daily_totals$daily_total, na.rm = TRUE)
+        sd_daily <- sd(daily_totals$daily_total, na.rm = TRUE)
+
+        # Use safe_divide to prevent division by zero
+        results$cv <- round(safe_divide(sd_daily, mean_daily) * 100, 1)
         results$consistency_score <- max(0, 100 - results$cv)
 
         # Weekend vs Weekday comparison
@@ -150,7 +167,8 @@ patternServer <- function(id, dt) {
         if (nrow(daytype_avg) == 2) {
           weekday_avg <- daytype_avg[day_type == "Weekday", avg_consumption]
           weekend_avg <- daytype_avg[day_type == "Weekend", avg_consumption]
-          results$weekend_diff_pct <- round((weekend_avg - weekday_avg) / weekday_avg * 100, 1)
+          # Use safe_divide to prevent division by zero
+          results$weekend_diff_pct <- round(safe_divide(weekend_avg - weekday_avg, weekday_avg) * 100, 1)
         } else {
           results$weekend_diff_pct <- 0
         }
@@ -481,6 +499,11 @@ patternServer <- function(id, dt) {
       # Pattern Statistics ----
       output$pattern_stats <- renderUI({
         results <- pattern_results()
+        df <- results$data
+
+        # Get actual date range from data
+        date_range_start <- min(as.Date(df$start_date))
+        date_range_end <- max(as.Date(df$start_date))
 
         stats_list <- tagList(
           tags$div(
@@ -488,7 +511,7 @@ patternServer <- function(id, dt) {
             tags$h4("Pattern Analysis Summary"),
             tags$hr(),
             tags$p(strong("Analysis Period: "),
-                   paste(input$dates[1], "to", input$dates[2])),
+                   paste(date_range_start, "to", date_range_end)),
             tags$p(strong("Total Days Analyzed: "), results$total_days),
             tags$p(strong("Average Daily Consumption: "),
                    paste(results$avg_daily_consumption, "kWh")),
@@ -614,31 +637,6 @@ patternServer <- function(id, dt) {
             )
           )
       })
-
-      # Download Handler ----
-      output$download_report <- downloadHandler(
-        filename = function() {
-          paste0("Pattern_Report_", input$pattern_type, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- pattern_results()
-
-          if (results$type == 'daily') {
-            report_data <- results$hourly_pattern
-          } else if (results$type == 'weekly') {
-            report_data <- results$weekly_pattern
-          } else if (results$type == 'daytype') {
-            report_data <- results$daytype_pattern
-          } else if (results$type == 'clustering' && !is.null(results$cluster_info)) {
-            report_data <- results$cluster_info
-          } else {
-            report_data <- data.frame(Message = "No pattern data available")
-          }
-
-          write.csv(report_data, file, row.names = FALSE)
-          logger::log_info("Pattern report downloaded: {results$type}")
-        }
-      )
 
     }
   )

@@ -4,6 +4,38 @@ anomalyUI <- function(id, label = 'anomaly') {
   h3('Anomaly Detection')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      column(
+        width = 12,
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #f59e0b;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Anomaly Detection identifies unusual consumption patterns that deviate significantly from your normal usage. This can help spot appliance malfunctions, unusual events, or data quality issues."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Automatically detects anomalies when you select a method or adjust sensitivity. Results update in real-time."),
+              tags$li(tags$strong("Detection Methods:"), " IQR (statistical), Z-Score (standard deviation), STL (seasonal), Moving Average (trend-based)."),
+              tags$li(tags$strong("Sensitivity:"), " Lower values (1-3) = stricter detection, higher values (7-10) = more lenient. Start with 5."),
+              tags$li(tags$strong("Interpreting Results:"), " Critical anomalies need immediate attention. Medium anomalies may indicate unusual but not problematic behavior.")
+            )
+          )
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(
@@ -29,13 +61,7 @@ anomalyUI <- function(id, label = 'anomaly') {
                  min = 1,
                  max = 10,
                  step = 1
-               )),
-        column(width = 4,
-               actionButton(inputId = ns('run_detection'),
-                            label = 'Detect Anomalies',
-                            icon = icon('search'),
-                            class = 'btn-primary btn-lg',
-                            style = 'margin-top: 25px;'))
+               ))
       )
     ),
 
@@ -95,10 +121,6 @@ anomalyUI <- function(id, label = 'anomaly') {
         title = 'Detected Anomalies - Detailed View',
         status = 'warning',
         solidHeader = TRUE,
-        downloadButton(ns('download_anomalies'),
-                       label = 'Download Anomaly Report',
-                       class = 'btn-success',
-                       style = 'margin-bottom: 10px;'),
         DT::dataTableOutput(ns('anomaly_table'))
       )
     )
@@ -113,7 +135,6 @@ anomalyServer <- function(id, dt) {
 
       # Anomaly Detection Reactive ----
       anomaly_results <- reactive({
-        input$run_detection
         req(dt())
         req(input$detection_method)
         req(input$sensitivity)
@@ -547,30 +568,6 @@ anomalyServer <- function(id, dt) {
             )
         }
       })
-
-      # Download Handler ----
-      output$download_anomalies <- downloadHandler(
-        filename = function() {
-          paste0("Anomaly_Report_", input$detection_method, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- anomaly_results()
-
-          report_data <- results$data[is_anomaly == TRUE, .(
-            Timestamp = dttm_start,
-            Value = value,
-            Expected_Range_Lower = expected_range_lower,
-            Expected_Range_Upper = expected_range_upper,
-            Anomaly_Score = anomaly_score,
-            Severity = severity,
-            Detection_Method = results$method,
-            Sensitivity = results$sensitivity
-          )][order(-Anomaly_Score)]
-
-          write.csv(report_data, file, row.names = FALSE)
-          logger::log_info("Anomaly report downloaded: {results$method} method, {nrow(report_data)} anomalies")
-        }
-      )
 
     }
   )

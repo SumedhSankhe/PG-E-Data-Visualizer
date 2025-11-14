@@ -4,6 +4,38 @@ costUI <- function(id, label = 'cost') {
   h3('Cost Optimization')
   shinyjs::useShinyjs()
   fluidPage(
+    # Help Box
+    fluidRow(
+      column(
+        width = 12,
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #ef4444;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Cost Optimization calculates your electricity costs under different PG&E rate plans and identifies opportunities to save money by adjusting your usage patterns or switching rate plans."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Select a rate plan and configure its parameters (rates, peak hours, tier limits). Costs automatically recalculate as you adjust values."),
+              tags$li(tags$strong("Rate Plans:"), " Time of Use (different rates for peak/off-peak), Tiered (usage-based pricing), EV (optimized for electric vehicle charging), or Custom flat rates."),
+              tags$li(tags$strong("Key Insights:"), " Review the 'Rate Plan Comparison' chart to see which plan saves you the most money. Check 'Recommendations' for specific actions to reduce costs."),
+              tags$li(tags$strong("Tip:"), " If peak costs are high (>50%), consider shifting high-energy activities (laundry, dishwasher, EV charging) to off-peak hours.")
+            )
+          )
+        )
+      )
+    ),
+
     # Control Panel
     fluidRow(
       shinydashboard::box(
@@ -25,16 +57,7 @@ costUI <- function(id, label = 'cost') {
                  ))
         ),
         # Dynamic Rate Plan Inputs (server-side rendered)
-        uiOutput(ns('rate_plan_inputs')),
-        # Calculate Button Row
-        fluidRow(
-          column(width = 12, align = 'center',
-                 actionButton(inputId = ns('calculate_cost'),
-                              label = 'Calculate Costs',
-                              icon = icon('calculator'),
-                              class = 'btn-primary btn-lg',
-                              style = 'margin-top: 15px; width: 50%;'))
-        )
+        uiOutput(ns('rate_plan_inputs'))
       )
     ),
 
@@ -110,12 +133,7 @@ costUI <- function(id, label = 'cost') {
                  )),
           column(width = 4,
                  h4('Cost Summary Table'),
-                 DT::dataTableOutput(ns('cost_summary_table')),
-                 br(),
-                 downloadButton(ns('download_cost_report'),
-                                label = 'Download Cost Report',
-                                class = 'btn-success btn-lg',
-                                style = 'width: 100%;'))
+                 DT::dataTableOutput(ns('cost_summary_table')))
         )
       )
     )
@@ -253,7 +271,6 @@ costServer <- function(id, dt) {
 
       # Cost Calculation Reactive ----
       cost_results <- reactive({
-        input$calculate_cost
         req(dt())
         req(input$rate_plan)
 
@@ -277,6 +294,17 @@ costServer <- function(id, dt) {
           peak_end <- input$peak_end
           peak_rate <- input$peak_rate
           offpeak_rate <- input$offpeak_rate
+
+          # Validate peak hours
+          hours_validation <- validate_peak_hours(peak_start, peak_end, session)
+          validate(need(hours_validation$valid, paste(hours_validation$errors, collapse = "; ")))
+
+          # Validate rates
+          peak_rate_validation <- validate_rate(peak_rate, "Peak rate", session)
+          validate(need(peak_rate_validation$valid, peak_rate_validation$message))
+
+          offpeak_rate_validation <- validate_rate(offpeak_rate, "Off-peak rate", session)
+          validate(need(offpeak_rate_validation$valid, offpeak_rate_validation$message))
 
           df[, is_peak := hour >= peak_start & hour <= peak_end]
           df[, rate := ifelse(is_peak, peak_rate, offpeak_rate)]
@@ -326,9 +354,9 @@ costServer <- function(id, dt) {
         # Overall statistics
         results$total_cost <- sum(df$cost, na.rm = TRUE)
         results$total_days <- length(unique(df$start_date))
-        results$avg_daily_cost <- results$total_cost / results$total_days
+        results$avg_daily_cost <- safe_divide(results$total_cost, results$total_days)
         results$total_consumption <- sum(df$value, na.rm = TRUE)
-        results$avg_rate <- results$total_cost / results$total_consumption
+        results$avg_rate <- safe_divide(results$total_cost, results$total_consumption)
 
         # Hourly cost analysis
         results$hourly_costs <- df[, .(
@@ -346,7 +374,7 @@ costServer <- function(id, dt) {
 
         # Peak cost percentage (for TOU plans)
         if (input$rate_plan == 'tou' || input$rate_plan == 'ev') {
-          results$peak_cost_pct <- round((results$peak_cost / results$total_cost) * 100, 1)
+          results$peak_cost_pct <- round(safe_percentage(results$peak_cost, results$total_cost), 1)
         } else {
           results$peak_cost_pct <- NA
         }
@@ -723,29 +751,6 @@ costServer <- function(id, dt) {
             backgroundColor = DT::styleInterval(c(0), c('#FFE6E6', '#E6FFE6'))
           )
       })
-
-      # Download Handler ----
-      output$download_cost_report <- downloadHandler(
-        filename = function() {
-          paste0("Cost_Analysis_", input$rate_plan, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- cost_results()
-
-          # Create comprehensive report
-          report <- results$data_with_cost[, .(
-            Timestamp = dttm_start,
-            Hour = hour,
-            Consumption_kWh = value,
-            Rate_Applied = rate,
-            Cost = cost,
-            Date = start_date
-          )][order(Timestamp)]
-
-          write.csv(report, file, row.names = FALSE)
-          logger::log_info("Cost report downloaded: {input$rate_plan} plan")
-        }
-      )
 
     }
   )
