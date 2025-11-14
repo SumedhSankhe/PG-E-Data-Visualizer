@@ -6,24 +6,33 @@ patternUI <- function(id, label = 'pattern') {
   fluidPage(
     # Help Box
     fluidRow(
-      shinydashboard::box(
+      column(
         width = 12,
-        status = 'info',
-        solidHeader = FALSE,
-        collapsible = TRUE,
-        collapsed = TRUE,
-        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
-        p(
-          style = "font-size: 14px; line-height: 1.6;",
-          "Pattern Recognition discovers recurring consumption patterns in your energy usage across days, weeks, and seasons. This helps you understand your typical behavior and optimize usage schedules."
-        ),
-        tags$ul(
-          style = "font-size: 14px; line-height: 1.6;",
-          tags$li(tags$strong("How it works:"), " Select a pattern type to automatically analyze your consumption patterns. Results update instantly."),
-          tags$li(tags$strong("Daily Patterns:"), " Shows your average hourly consumption profile across all days."),
-          tags$li(tags$strong("Weekly Patterns:"), " Compares usage across different days of the week (Monday through Sunday)."),
-          tags$li(tags$strong("Day Type Comparison:"), " Reveals differences between weekday and weekend consumption habits."),
-          tags$li(tags$strong("Load Curve Clustering:"), " Groups similar consumption days together to identify different usage modes (e.g., work-from-home vs away days).")
+        div(
+          style = "margin-bottom: 20px; border: 1px solid #e5e7eb; border-radius: 4px; background-color: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.05);",
+          div(
+            style = "padding: 12px 20px; background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%); border-bottom: 1px solid #e5e7eb; cursor: pointer; border-radius: 4px 4px 0 0;",
+            onclick = "$(this).next().slideToggle(200);",
+            tags$span(
+              style = "font-size: 15px; font-weight: 500; color: #6366f1;",
+              icon('question-circle'), ' Need help? Click to expand'
+            )
+          ),
+          div(
+            style = "display: none; padding: 20px;",
+            p(
+              style = "font-size: 14px; line-height: 1.6; color: #374151;",
+              "Pattern Recognition discovers recurring consumption patterns in your energy usage across days, weeks, and seasons. This helps you understand your typical behavior and optimize usage schedules."
+            ),
+            tags$ul(
+              style = "font-size: 14px; line-height: 1.6; color: #4b5563;",
+              tags$li(tags$strong("How it works:"), " Select a pattern type to automatically analyze your consumption patterns. Results update instantly."),
+              tags$li(tags$strong("Daily Patterns:"), " Shows your average hourly consumption profile across all days."),
+              tags$li(tags$strong("Weekly Patterns:"), " Compares usage across different days of the week (Monday through Sunday)."),
+              tags$li(tags$strong("Day Type Comparison:"), " Reveals differences between weekday and weekend consumption habits."),
+              tags$li(tags$strong("Load Curve Clustering:"), " Groups similar consumption days together to identify different usage modes (e.g., work-from-home vs away days).")
+            )
+          )
         )
       )
     ),
