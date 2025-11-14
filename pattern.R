@@ -114,20 +114,7 @@ patternUI <- function(id, label = 'pattern') {
     ),
 
     # Clustering Results (conditional - single box)
-    uiOutput(ns('clustering_box')),
-
-    # Download Section
-    fluidRow(
-      shinydashboard::box(
-        width = 12,
-        title = 'Pattern Analysis Report',
-        status = 'success',
-        solidHeader = TRUE,
-        downloadButton(ns('download_report'),
-                       label = 'Download Pattern Report',
-                       class = 'btn-success btn-lg')
-      )
-    )
+    uiOutput(ns('clustering_box'))
   )
 }
 
@@ -640,31 +627,6 @@ patternServer <- function(id, dt) {
             )
           )
       })
-
-      # Download Handler ----
-      output$download_report <- downloadHandler(
-        filename = function() {
-          paste0("Pattern_Report_", input$pattern_type, "_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          results <- pattern_results()
-
-          if (results$type == 'daily') {
-            report_data <- results$hourly_pattern
-          } else if (results$type == 'weekly') {
-            report_data <- results$weekly_pattern
-          } else if (results$type == 'daytype') {
-            report_data <- results$daytype_pattern
-          } else if (results$type == 'clustering' && !is.null(results$cluster_info)) {
-            report_data <- results$cluster_info
-          } else {
-            report_data <- data.frame(Message = "No pattern data available")
-          }
-
-          write.csv(report_data, file, row.names = FALSE)
-          logger::log_info("Pattern report downloaded: {results$type}")
-        }
-      )
 
     }
   )

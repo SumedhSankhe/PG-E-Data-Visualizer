@@ -35,18 +35,6 @@ qcUI <- function(id, label = 'qc') {
       )
     ),
 
-    # QC Controls
-    fluidRow(
-      shinydashboard::box(
-        width = 12,
-        title = 'QC Controls', status = 'primary', solidHeader = TRUE,
-        column(width = 12, align = 'center',
-               downloadButton(ns('download_qc_report'),
-                              label = 'Download QC Report',
-                              class = 'btn-success btn-lg'))
-      )
-    ),
-
     # QC Metrics Value Boxes
     fluidRow(
       column(width = 3,
@@ -494,41 +482,6 @@ qcServer <- function(id, dt) {
             displaylogo = FALSE
           )
       })
-
-      # Download QC Report ----
-      output$download_qc_report <- downloadHandler(
-        filename = function() {
-          paste0("QC_Report_", Sys.Date(), ".csv")
-        },
-        content = function(file) {
-          qc <- qc_results()
-
-          report <- data.frame(
-            Section = c(rep("Overview", 2), rep("Statistics", 5), rep("Quality Checks", 5)),
-            Metric = c("Date Range", "Total Records",
-                       "Mean (kWh)", "Median (kWh)", "Min (kWh)", "Max (kWh)", "Std Dev",
-                       "Missing Values", "Outliers", "Negative Values", "Zero Values",
-                       "Data Quality Score (%)"),
-            Value = c(
-              qc$date_range,
-              qc$total_records,
-              qc$mean_value,
-              qc$median_value,
-              qc$min_value,
-              qc$max_value,
-              qc$sd_value,
-              paste0(qc$missing_values, " (", qc$missing_pct, "%)"),
-              paste0(qc$outliers, " (", qc$outlier_pct, "%)"),
-              qc$negative_values,
-              paste0(qc$zero_values, " (", qc$zero_pct, "%)"),
-              round(qc$quality_score, 1)
-            )
-          )
-
-          write.csv(report, file, row.names = FALSE)
-          logger::log_info("QC report downloaded")
-        }
-      )
 
     }
   )
