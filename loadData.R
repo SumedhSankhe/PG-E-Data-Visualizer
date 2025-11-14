@@ -100,45 +100,108 @@ loadServer <- function(id) {
 
       # Reactive that loads user file or fallback RDS
       dat <- reactive({
-        user_path <- input$localfile$datapath
-        if (!is.null(user_path) && nzchar(user_path)) {
-          log_info("[loadData] User file upload detected: {basename(user_path)}")
+        user_file <- input$localfile
+
+        if (!is.null(user_file) && !is.null(user_file$datapath)) {
+          log_info("[loadData] User file upload detected: {user_file$name}")
+
+          # Validate file upload
+          validation <- validate_upload_file(user_file, session)
+          if (!validation$valid) {
+            log_error("[loadData] File validation failed: {validation$message}")
+            showNotification(
+              paste("Upload failed:", validation$message),
+              type = "error",
+              duration = 10
+            )
+            # Return fallback data instead of NULL
+            log_info("[loadData] Using fallback RDS after validation failure")
+            return(read_rds_safely(DEFAULT_DATA_FILE))
+          }
+
+          # Read file with error handling
           df <- tryCatch({
-            data.table::fread(user_path)
+            data.table::fread(user_file$datapath)
           }, error = function(e) {
             log_error("[loadData] Failed reading uploaded file: {e$message}")
+            showNotification(
+              paste("Error reading file:", e$message),
+              type = "error",
+              duration = 10
+            )
             NULL
           })
-          if (!is.null(df)) {
-            log_info("[loadData] Uploaded file rows={nrow(df)} cols={ncol(df)}")
+
+          if (is.null(df)) {
+            log_warn("[loadData] File read returned NULL, using fallback")
+            return(read_rds_safely(DEFAULT_DATA_FILE))
           }
+
+          log_info("[loadData] Uploaded file rows={nrow(df)} cols={ncol(df)}")
+
+          # Validate required columns
+          col_validation <- validate_required_columns(df, session)
+          if (!col_validation$valid) {
+            log_error("[loadData] Column validation failed: {col_validation$message}")
+            showNotification(
+              paste("Invalid data structure:", col_validation$message),
+              type = "error",
+              duration = 10
+            )
+            return(read_rds_safely(DEFAULT_DATA_FILE))
+          }
+
+          log_info("[loadData] File upload successful and validated")
+          showNotification(
+            paste("File uploaded successfully:", user_file$name),
+            type = "message",
+            duration = 3
+          )
           return(df)
         }
+
         # Fallback to default RDS
         log_info("[loadData] Using fallback RDS: {DEFAULT_DATA_FILE}")
         read_rds_safely(DEFAULT_DATA_FILE)
       })
 
-      # Data validity check
+      # Data validity check (additional monitoring)
       observe({
         d <- dat()
         if (is.null(d)) {
           log_warn("[loadData] Data reactive is NULL; table will not render")
+          showNotification(
+            "No data available. Please upload a valid file.",
+            type = "warning",
+            duration = 5
+          )
         } else {
-          # Example required columns check
-          required_cols <- c("dttm_start", "hour", "value")
-          missing <- setdiff(required_cols, names(d))
-          if (length(missing) > 0) {
-            log_warn("[loadData] Missing required columns: {paste(missing, collapse=', ')}")
-          } else {
-            log_debug("[loadData] All required columns present")
-          }
+          log_debug("[loadData] Data loaded successfully with {nrow(d)} rows")
         }
       })
 
       output$tableOutput <- DT::renderDataTable({
         req(dat())
-        DT::datatable(dat(), options = list(scrollX = TRUE, scrollCollapse = TRUE))
+        data <- dat()
+
+        # Use server-side processing for large datasets
+        use_server_side <- nrow(data) > UI_DATATABLE_MAX_ROWS
+
+        DT::datatable(
+          data,
+          options = list(
+            scrollX = TRUE,
+            scrollCollapse = TRUE,
+            pageLength = UI_DATATABLE_PAGE_LENGTH,
+            serverSide = use_server_side,
+            processing = TRUE,
+            dom = 'Bfrtip',
+            buttons = c('copy', 'csv', 'excel'),
+            order = list(list(0, 'asc'))  # Sort by first column (timestamp)
+          ),
+          filter = 'top',
+          class = 'cell-border stripe hover'
+        )
       })
 
       output$dataMeta <- renderText({
