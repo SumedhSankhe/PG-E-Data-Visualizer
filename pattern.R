@@ -11,8 +11,8 @@ patternUI <- function(id, label = 'pattern') {
         status = 'info',
         solidHeader = FALSE,
         collapsible = TRUE,
-        collapsed = FALSE,
-        title = tags$span(icon('info-circle'), ' What does Pattern Recognition do?'),
+        collapsed = TRUE,
+        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
         p(
           style = "font-size: 14px; line-height: 1.6;",
           "Pattern Recognition discovers recurring consumption patterns in your energy usage across days, weeks, and seasons. This helps you understand your typical behavior and optimize usage schedules."

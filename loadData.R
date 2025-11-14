@@ -12,8 +12,8 @@ loadUI <- function(id, label = 'loadData') {
         status = 'info',
         solidHeader = FALSE,
         collapsible = TRUE,
-        collapsed = FALSE,
-        title = tags$span(icon('info-circle'), ' How to load your energy data'),
+        collapsed = TRUE,
+        title = tags$span(icon('question-circle'), ' Need help? Click to expand'),
         p(
           style = "font-size: 14px; line-height: 1.6;",
           "Upload your PG&E smart meter data file (CSV or TSV format) or use the included sample dataset to explore the application."
