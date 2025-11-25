@@ -5,15 +5,31 @@
 [![R Version](https://img.shields.io/badge/R-%3E%3D%204.0.0-blue.svg)](https://www.r-project.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-> An interactive R Shiny dashboard for exploring and analyzing Pacific Gas & Electric (PG&E) smart meter energy consumption data with powerful visualizations and rate plan comparisons.
+> A production-ready R Shiny web application that transforms smart meter data into actionable insights through statistical quality control, machine learning-based anomaly detection, pattern recognition, and cost optimization algorithms.
 
-![PG&E Data Visualizer](docs/screenshot.png)
+**[Live Demo](https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/)** | [Documentation](#documentation) | [Quick Start](#quick-start)
+
+---
+
+## At a Glance
+
+**What it does:** Analyzes Pacific Gas & Electric (PG&E) smart meter energy consumption data through four specialized analysis engines: data quality validation, statistical anomaly detection (IQR, Z-Score, STL decomposition, Moving Average), usage pattern recognition with k-means clustering, and rate plan cost optimization.
+
+**Tech Stack:** R, Shiny, shinydashboard, ggplot2, plotly, data.table, logger, DT, openxlsx
+
+**Key Features:**
+- Real-time data quality control with outlier detection
+- Four anomaly detection algorithms with configurable sensitivity
+- Load curve clustering for pattern identification
+- Multi-plan cost comparison (TOU, Tiered, EV rates)
+- Comprehensive Excel export with 5-sheet analysis reports
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [What I Built](#what-i-built)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Installation](#installation)
@@ -25,26 +41,60 @@
 - [Contributing](#contributing)
 - [Documentation](#documentation)
 - [Troubleshooting](#troubleshooting)
-- [Roadmap](#roadmap)
 - [License](#license)
 
 ---
 
 ## Overview
 
-The **PG&E Data Visualizer** is a web-based application built with R Shiny that helps utilities, energy customers, and analysts understand energy consumption patterns through interactive visualizations. The application provides:
+The **PG&E Data Visualizer** is a web-based application built with R Shiny that transforms raw smart meter data into actionable insights through four specialized analysis modules. The application provides a complete analytical pipeline from data quality validation through anomaly detection, pattern recognition, and cost optimization.
 
-- **Time Series Analysis**: Visualize hourly consumption patterns across multiple days
-- **Distribution Analysis**: Understand usage variability with box plots and statistical summaries
-- **Rate Plan Comparison**: Evaluate different PG&E pricing structures (Time of Use, Tiered, EV Plans)
-- **Interactive Exploration**: Zoom, pan, and hover for detailed insights
+**[Try the live application](https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/)**
+
+### Analysis Capabilities
+
+- **Quality Control**: Statistical validation with IQR-based outlier detection, missing value analysis, and automated quality scoring
+- **Anomaly Detection**: Four configurable algorithms (IQR, Z-Score, STL decomposition, Moving Average) with adjustable sensitivity
+- **Pattern Recognition**: Daily, weekly, and seasonal pattern analysis with k-means load curve clustering
+- **Cost Optimization**: Rate plan comparison across Time of Use, Tiered, and EV plans with peak/off-peak cost breakdown
 
 ### Use Cases
 
-- **Energy Analysts**: Compare rate plans and identify cost-saving opportunities
-- **Homeowners**: Understand peak usage hours and optimize consumption
-- **Utilities**: Analyze consumption patterns and support customer decision-making
-- **Researchers**: Study energy usage trends and behavioral patterns
+- **Energy Analysts**: Identify consumption anomalies and compare rate plans to recommend cost-saving strategies
+- **Homeowners**: Understand peak usage hours, detect unusual consumption, and evaluate switching rate plans
+- **Utilities**: Validate meter data quality and support customer decision-making with data-driven insights
+- **Researchers**: Study energy usage patterns and behavioral trends with statistical rigor
+
+---
+
+## What I Built
+
+This project demonstrates full-stack data science application development, from statistical algorithms through production deployment. Here are the key technical achievements:
+
+### Technical Complexity
+
+**Multi-Algorithm Anomaly Detection**: Implemented four distinct anomaly detection methods (IQR, Z-Score, STL seasonal decomposition, Moving Average), each with configurable sensitivity parameters. The STL implementation handles seasonal patterns in time series data, while the Moving Average approach detects trend deviations.
+
+**Pattern Recognition Engine**: Built a clustering system that groups similar consumption profiles using k-means, enabling automatic identification of usage patterns (weekday vs weekend, seasonal variations, behavior changes). The system generates load curves and compares them across multiple dimensions.
+
+**Real-Time Reactivity**: Architected a modular Shiny application where changes to the global date filter instantly propagate through all four analysis modules. Used data.table for high-performance operations on large datasets and reactive programming patterns to maintain UI responsiveness.
+
+**Comprehensive Export System**: Developed an automated report generator that produces formatted Excel workbooks with five analysis sheets (Overview, Quality Control, Anomalies, Pattern Analysis, Cost Analysis), complete with calculated metrics, conditional formatting, and summary statistics.
+
+### Design Decisions
+
+**Why Shiny Modules**: Chose the module pattern to isolate each analysis engine's logic and UI, making the codebase maintainable and testable. Each module (qc, anomaly, pattern, cost) operates independently but shares a common filtered dataset.
+
+**Why data.table**: Selected data.table over dplyr for its superior performance with large time series datasets. The reference semantics and efficient grouping operations were critical for real-time filtering and aggregation.
+
+**Why Multiple Anomaly Methods**: Different anomaly detection algorithms excel in different scenarios. IQR handles non-normal distributions, Z-Score works for normally distributed data, STL extracts seasonal components, and Moving Average detects trend changes. Giving users all four options maximizes the tool's utility.
+
+### Challenges Solved
+
+- **Performance**: Optimized reactive chains to prevent redundant calculations when the global date filter changes
+- **State Management**: Coordinated state across six independent modules while maintaining data consistency
+- **User Experience**: Designed collapsible help sections and real-time validation to make statistical analysis accessible to non-technical users
+- **Production Deployment**: Configured for shinyapps.io with proper dependency management via renv and structured logging
 
 ---
 
@@ -52,26 +102,46 @@ The **PG&E Data Visualizer** is a web-based application built with R Shiny that 
 
 ### Core Functionality
 
-- **Modular Architecture**: Clean Shiny module pattern (`home`, `loadData`, `analyse`)
-- **Flexible Data Input**: Upload CSV/TSV files or use bundled sample data
+- **Modular Architecture**: Six independent Shiny modules (`home`, `loadData`, `qc`, `anomaly`, `pattern`, `cost`)
+- **Flexible Data Input**: Upload CSV/TSV files or use bundled sample data with automatic validation
 - **Interactive Visualizations**:
-  - Time series plots with overlaid daily patterns and trend lines
-  - Box plots showing hourly distribution with quartiles and outliers
-  - Built with ggplot2 and plotly for rich interactivity
-- **Rate Plan Support**:
-  - Time of Use (E-TOU-C, E-TOU-D) with configurable peak hours
-  - Tiered Rate Plans (T1, T2, T3)
-  - Electric Vehicle Plans (EV2-A, EV-B)
-  - Solar & Renewable Energy Plans (coming soon)
+  - Time series plots with anomaly highlighting and trend overlays
+  - Box plots and histograms showing statistical distributions
+  - Heatmaps for hourly consumption patterns
+  - Daily cost trends and rate plan comparison charts
+  - All built with ggplot2 and plotly for rich interactivity
+- **Quality Control Module**:
+  - Automated outlier detection using IQR method
+  - Missing value analysis and time gap detection
+  - Quality score calculation and flag generation
+  - Distribution analysis with statistical summaries
+- **Anomaly Detection Module**:
+  - Four detection algorithms: IQR, Z-Score, STL, Moving Average
+  - Configurable sensitivity (1-10 scale)
+  - Severity classification (Critical, High, Medium, Low)
+  - Time series visualization with anomaly highlighting
+- **Pattern Recognition Module**:
+  - Daily, weekly, and day-type pattern analysis
+  - K-means load curve clustering (2-7 clusters)
+  - Hourly consumption heatmaps
+  - Pattern consistency scoring
+- **Cost Optimization Module**:
+  - Time of Use (TOU) rate plans with configurable peak hours
+  - Tiered rate plans with usage-based pricing
+  - Electric Vehicle (EV) rate plans
+  - Custom flat rate option
+  - Peak vs off-peak cost breakdown and savings recommendations
+- **Global Date Filtering**: Single date range control that updates all analysis modules in real-time
+- **Comprehensive Export**: One-click Excel download with all analyses in formatted sheets
 - **Comprehensive Logging**: Daily rotating logs with structured logging via `logger` package
-- **Responsive Design**: Clean, professional UI with shinydashboard
+- **Responsive Design**: Clean, professional UI with shinydashboard and custom CSS
 
 ### Quality Assurance
 
 - **Automated Testing**: Unit tests with `testthat`, CI/CD with GitHub Actions
-- **Code Quality**: Automated linting and style checks
+- **Code Quality**: Automated linting and style checks with `.lintr` configuration
 - **Dependency Management**: Reproducible environments with `renv`
-- **Documentation**: Comprehensive inline comments and agent-based development guides
+- **Production Ready**: Deployed on shinyapps.io with monitoring and structured logging
 
 ---
 
@@ -144,40 +214,94 @@ See `renv.lock` for complete dependency list with versions.
 Navigate to the **Data** tab and:
 - Upload a CSV or TSV file with your smart meter data, OR
 - Use the pre-loaded sample dataset (`data/meterData.rds`)
+- View the interactive data table to verify your upload
 
-### 2. Configure Analysis
+### 2. Set Global Date Range
 
-Go to the **Analyse** tab and:
-- Select your **rate plan type** (Time of Use, Tiered, EV Plan, etc.)
-- Choose specific **tier options** based on your plan
-- Set your **date range** to analyze specific periods
-- For Time of Use plans, configure peak hours and pricing
+Use the **Global Date Filter** in the sidebar to:
+- Select the date range you want to analyze
+- Changes apply to all analysis modules instantly
+- Download button becomes available once dates are selected
 
-### 3. Explore Visualizations
+### 3. Quality Control
 
-- **Time Series Plot**: See how consumption varies by hour across multiple days
-- **Distribution Box Plot**: Identify typical usage ranges and outliers for each hour
+Go to the **Quality Control** tab to:
+- Review automated quality metrics (total records, missing values, outliers, quality score)
+- Examine data completeness by hour
+- Identify problematic time periods with highlighted issues
+- Check value distribution and outlier flags
+
+### 4. Anomaly Detection
+
+Navigate to the **Anomaly Detection** tab and:
+- Select a detection method (IQR, Z-Score, STL, or Moving Average)
+- Adjust sensitivity (1 = strict, 10 = lenient)
+- Review anomaly counts and severity distribution
+- Examine the time series with anomalies highlighted
+- Export detected anomalies for further investigation
+
+### 5. Pattern Recognition
+
+Go to the **Pattern Recognition** tab to:
+- Choose pattern type (Daily, Weekly, Day Type, or Load Curve Clustering)
+- For clustering, select number of clusters (2-7)
+- View hourly consumption heatmaps
+- Identify peak hours and usage consistency patterns
+- Compare weekday vs weekend consumption
+
+### 6. Cost Optimization
+
+Navigate to the **Cost Optimization** tab and:
+- Select rate plan (TOU, Tiered, EV, or Custom)
+- Configure plan parameters (peak hours, rates, tier limits)
+- Review total cost, daily average, and peak cost percentage
+- Examine cost trends and hourly breakdowns
+- Read recommendations for cost savings
+- Compare different rate plans to find the best option
+
+### 7. Export Complete Report
+
+Click **Download All Reports** in the sidebar to:
+- Generate a comprehensive Excel workbook
+- Includes 5 sheets: Overview, Quality Control, Anomalies, Pattern Analysis, Cost Analysis
+- All metrics and visualizations summarized in one file
 
 ### Example Workflow
 
 ```r
-# 1. Start the app
+# 1. Start the app (or use the live demo)
 shiny::runApp('.')
 
-# 2. Navigate to Data tab
-#    - Upload your_meter_data.csv
+# 2. Load data
+#    - Navigate to Data tab
+#    - Upload your_meter_data.csv or use sample data
 
-# 3. Navigate to Analyse tab
-#    - Select "Time of Use" plan
-#    - Choose "E-TOU-C" tier
-#    - Set date range: 2024-01-01 to 2024-01-31
-#    - Configure peak hours: 16-21 (4 PM - 9 PM)
-#    - Set peak rate: $0.45/kWh, off-peak: $0.25/kWh
+# 3. Set date range
+#    - Use sidebar Global Date Filter
+#    - Select: 2024-01-01 to 2024-01-31
 
-# 4. Explore the visualizations
-#    - Hover over plots for details
-#    - Zoom and pan to focus on specific periods
-#    - Identify peak usage hours
+# 4. Quality check
+#    - Go to Quality Control tab
+#    - Verify quality score > 90%
+
+# 5. Find anomalies
+#    - Go to Anomaly Detection tab
+#    - Select "IQR" method, sensitivity = 5
+#    - Review 15 detected anomalies
+
+# 6. Identify patterns
+#    - Go to Pattern Recognition tab
+#    - Select "Load Curve Clustering", 3 clusters
+#    - Observe weekday/weekend/holiday patterns
+
+# 7. Optimize costs
+#    - Go to Cost Optimization tab
+#    - Compare TOU vs Tiered plans
+#    - Identify 18% potential savings by shifting peak usage
+
+# 8. Export report
+#    - Click "Download All Reports" in sidebar
+#    - Open Excel file to review all analyses
 ```
 
 ---
@@ -233,11 +357,17 @@ PG-E-Data-Visualizer/
 ├── ui.R                    # Main Shiny UI definition
 ├── server.R                # Main Shiny server logic
 ├── global.R                # Global variables, constants, logging
+├── config.R                # Configuration and constants
+├── helpers.R               # Utility functions
 ├── home.R                  # Home module (UI & server)
 ├── loadData.R              # Data loading module
-├── analyse.R               # Analysis module (visualizations)
+├── qc.R                    # Quality Control module
+├── anomaly.R               # Anomaly Detection module
+├── pattern.R               # Pattern Recognition module
+├── cost.R                  # Cost Optimization module
 ├── .gitignore              # Git ignore rules
 ├── .lintr                  # Linting configuration
+├── DESCRIPTION             # Package metadata
 ├── README.md               # This file
 ├── renv.lock               # Dependency lock file
 ├── PG-E-Data-Visualizer.Rproj  # RStudio project
@@ -246,10 +376,12 @@ PG-E-Data-Visualizer/
 │   └── meterData.rds      # Sample dataset
 │
 ├── docs/
-│   ├── AGENTS.md          # Sub-agent responsibilities (20 agents)
-│   ├── CODE_REVIEW_CHECKLIST.md  # PR review guidelines
-│   ├── STYLE.md           # CSS and design guidelines (future)
-│   └── USER_GUIDE.md      # Detailed user manual (future)
+│   ├── AGENTS.md          # Development workflow documentation
+│   └── CODE_REVIEW_CHECKLIST.md  # PR review guidelines
+│
+├── www/
+│   ├── custom.css         # Custom CSS styling
+│   └── custom.js          # Custom JavaScript
 │
 ├── scripts/
 │   ├── lint.R             # Linting script
@@ -273,42 +405,84 @@ PG-E-Data-Visualizer/
 
 ### Module Architecture
 
-The application follows the **Shiny Module pattern** for modularity and maintainability:
+The application follows the **Shiny Module pattern** for modularity and maintainability. Each module is self-contained with its own UI and server logic:
 
 1. **Home Module** (`home.R`)
    - Landing page with application overview
-   - User guide and documentation
-   - No reactive server logic (static content)
+   - Quick start guide and feature descriptions
+   - Static content, no reactive logic
 
 2. **Load Data Module** (`loadData.R`)
-   - File upload interface
+   - File upload interface with drag-and-drop support
+   - CSV/TSV parsing with data.table
    - Data validation and error handling
-   - Interactive data table display
-   - Returns reactive data for downstream modules
+   - Interactive data table display with DT
+   - Returns reactive dataset for downstream modules
 
-3. **Analyse Module** (`analyse.R`)
-   - Rate plan selection controls
-   - Date range filtering
-   - Peak hour configuration (Time of Use plans)
-   - Time series and distribution visualizations
+3. **Quality Control Module** (`qc.R`)
+   - Automated quality metrics (missing values, outliers, quality score)
+   - IQR-based outlier detection
+   - Time series with data quality issues highlighted
+   - Completeness analysis by hour
+   - Distribution plots with statistical summaries
+
+4. **Anomaly Detection Module** (`anomaly.R`)
+   - Four detection algorithms: IQR, Z-Score, STL decomposition, Moving Average
+   - Configurable sensitivity parameter (1-10)
+   - Severity classification (Critical/High/Medium/Low)
+   - Time series visualization with anomaly highlighting
+   - Anomaly distribution by hour and severity
+   - Downloadable anomaly table
+
+5. **Pattern Recognition Module** (`pattern.R`)
+   - Daily pattern analysis (average hourly profile)
+   - Weekly pattern comparison (Monday-Sunday)
+   - Day type analysis (weekday vs weekend)
+   - K-means load curve clustering (2-7 clusters)
+   - Hourly consumption heatmaps
+   - Pattern consistency scoring
+
+6. **Cost Optimization Module** (`cost.R`)
+   - Multi-plan support: Time of Use, Tiered, EV, Custom
+   - Configurable peak hours and rate parameters
+   - Cost calculations with peak/off-peak breakdown
+   - Daily cost trends and hourly cost analysis
+   - Rate plan comparison visualizations
+   - Savings recommendations based on usage patterns
 
 ### Data Flow
 
 ```
-User Upload → loadDataServer → Reactive Data → analyseServer → Visualizations
-     ↓              ↓                                    ↓
-Sample Data    Validation                         Time Series Plot
-               Error Handling                     Distribution Plot
-               Logging
+User Upload → loadDataServer → Raw Reactive Data
+                                      ↓
+                            Global Date Filter (server.R)
+                                      ↓
+                           Filtered Reactive Data
+                      ↙        ↓        ↓        ↘
+                    qc     anomaly  pattern    cost
+                  Module    Module   Module   Module
+                    ↓         ↓        ↓        ↓
+                   QC     Anomaly   Pattern   Cost
+                Visuals   Visuals   Visuals  Visuals
+                                      ↓
+                          Excel Report Generator
+                                      ↓
+                        5-Sheet Workbook Download
 ```
+
+### Key Design Patterns
+
+- **Reactive Programming**: Global date filter propagates changes to all modules instantly
+- **Module Isolation**: Each analysis module operates independently with clean interfaces
+- **Lazy Evaluation**: Computations only trigger when data or inputs change
+- **Defensive Programming**: Extensive use of `req()` and `validate(need())` for robust error handling
+- **Structured Logging**: All operations logged with context via `logger` package
 
 ---
 
 ## Development
 
 ### Development Workflow
-
-Following the agent-based development lifecycle defined in `docs/AGENTS.md`:
 
 1. **Create Feature Branch**
    ```bash
@@ -319,7 +493,7 @@ Following the agent-based development lifecycle defined in `docs/AGENTS.md`:
    - Follow Shiny module pattern (`modNameUI`, `modNameServer`)
    - Use `req()` and `validate(need())` for error handling
    - Add logging with `logger::log_info()`, `logger::log_warn()`, etc.
-   - Keep functions under 60 lines
+   - Keep functions focused and readable
 
 3. **Code Quality Checks**
    ```r
@@ -333,22 +507,10 @@ Following the agent-based development lifecycle defined in `docs/AGENTS.md`:
    source('scripts/coverage.R') # Check coverage
    ```
 
-5. **Update Documentation**
-   - Update README if user-facing changes
-   - Update CHANGELOG (future)
-   - Add roxygen comments for new functions
-
-6. **Open Pull Request**
-   - Reference related issue
-   - Attach lint and test outputs
-   - Follow PR template (future)
-
-7. **Code Review**
-   - Address feedback from `docs/CODE_REVIEW_CHECKLIST.md`
-   - Ensure CI passes
-
-8. **Merge**
-   - Squash and merge after approvals
+5. **Commit and Push**
+   - Write clear commit messages
+   - Push to your feature branch
+   - Open a pull request with description of changes
 
 ### Coding Standards
 
@@ -363,23 +525,23 @@ Following the agent-based development lifecycle defined in `docs/AGENTS.md`:
 
 ```r
 # ✓ Good
-analyseServer <- function(id, data) {
+qcServer <- function(id, dt) {
   moduleServer(id, function(input, output, session) {
-    req(data())                          # Guard against NULL
+    req(dt())                            # Guard against NULL
     validate(need(                       # User-friendly error
-      nrow(data()) > 0,
-      "No data available for analysis"
+      nrow(dt()) > 0,
+      "No data available for quality control"
     ))
 
-    logger::log_info("Analysis started")  # Logging
+    logger::log_info("Quality control analysis started")  # Logging
 
     # Reactive logic here
   })
 }
 
 # ✗ Bad
-analyseServer<-function(id,data){  # No spaces, long line, no validation
-  moduleServer(id,function(input,output,session){plot(data()$value)})
+qcServer<-function(id,dt){  # No spaces, no validation, poor readability
+  moduleServer(id,function(input,output,session){plot(dt()$value)})
 }
 ```
 
@@ -478,17 +640,17 @@ We welcome contributions! Please follow these guidelines:
 - **Testing**: Add test coverage, create snapshot tests
 - **Performance**: Optimize rendering, caching, data processing
 
-### Code Review Process
+### Code Review Standards
 
-All contributions are reviewed by specialized agents defined in `docs/AGENTS.md`:
+All pull requests should meet these requirements:
 
-1. **Linting & Style Agent** - Code formatting and standards
-2. **Code Review Agent** - Quality, security, maintainability
-3. **Testing Agent** - Test coverage and quality
-4. **Documentation Agent** - Documentation updates
-5. **Security Agent** - Security vulnerabilities
+- Code follows style guidelines (run `scripts/lint.R`)
+- Tests pass and coverage is maintained (run `scripts/test.R`)
+- Changes are documented in code comments
+- No security vulnerabilities introduced
+- Commit messages are clear and descriptive
 
-See `docs/CODE_REVIEW_CHECKLIST.md` for detailed requirements.
+See `docs/CODE_REVIEW_CHECKLIST.md` for the complete checklist.
 
 ---
 
@@ -496,22 +658,16 @@ See `docs/CODE_REVIEW_CHECKLIST.md` for detailed requirements.
 
 ### Available Documentation
 
-- **README.md** (this file) - Project overview and quick start
-- **docs/AGENTS.md** - Complete lifecycle management with 20 specialized agents
-- **docs/CODE_REVIEW_CHECKLIST.md** - PR review requirements
-
-### Future Documentation
-
-- [ ] **docs/USER_GUIDE.md** - Detailed user manual with screenshots
-- [ ] **docs/DEPLOYMENT.md** - Deployment instructions for production
-- [ ] **docs/CONTRIBUTING.md** - Contributor guidelines
-- [ ] **docs/CHANGELOG.md** - Version history and release notes
-- [ ] **docs/API.md** - Function reference with roxygen docs
+- **README.md** (this file) - Complete project documentation and user guide
+- **Live Demo** - [Interactive application](https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/) with sample data
+- **docs/CODE_REVIEW_CHECKLIST.md** - Pull request review requirements
+- **Code Comments** - Inline documentation throughout the codebase
 
 ### Getting Help
 
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/SumedhSankhe/PG-E-Data-Visualizer/issues)
 - **Discussions**: Ask questions in [GitHub Discussions](https://github.com/SumedhSankhe/PG-E-Data-Visualizer/discussions)
+- **Live Demo**: Try the application at https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/
 
 ---
 
@@ -568,37 +724,6 @@ dir.create("logs", showWarnings = FALSE)
 
 ---
 
-## Roadmap
-
-### Short-term (1-3 months)
-
-- [ ] Implement `shinytest2` snapshot tests
-- [ ] Add performance metrics instrumentation
-- [ ] Create user guide with screenshots
-- [ ] Set up automated dependency scanning
-- [ ] Add CHANGELOG.md with version history
-
-### Medium-term (3-6 months)
-
-- [ ] Introduce accessibility scanning with `pa11y`
-- [ ] Implement A/B testing framework
-- [ ] Add export functionality (PDF reports, CSV downloads)
-- [ ] Create admin dashboard for monitoring
-- [ ] Side-by-side rate plan comparison view
-
-### Long-term (6-12 months)
-
-- [ ] Multi-language support (i18n)
-- [ ] API for programmatic access
-- [ ] Mobile-responsive redesign
-- [ ] Real-time data streaming support
-- [ ] Machine learning predictions for usage patterns
-- [ ] Integration with other utility data sources
-
-See `docs/AGENTS.md` for complete enhancement roadmap.
-
----
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -618,7 +743,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Author**: Sumedh Sankhe
 - **GitHub**: [@SumedhSankhe](https://github.com/SumedhSankhe)
 - **Repository**: [PG-E-Data-Visualizer](https://github.com/SumedhSankhe/PG-E-Data-Visualizer)
-
----
-
-**Built with ❤️ using R Shiny**
+- **Live Demo**: https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/
