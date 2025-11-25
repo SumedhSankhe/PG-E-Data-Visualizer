@@ -5,7 +5,7 @@
 [![R Version](https://img.shields.io/badge/R-%3E%3D%204.0.0-blue.svg)](https://www.r-project.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-> A production-ready R Shiny web application that transforms smart meter data into actionable insights through statistical quality control, machine learning-based anomaly detection, pattern recognition, and cost optimization algorithms.
+A production-ready R Shiny web application that transforms smart meter data into actionable insights through statistical quality control, machine learning-based anomaly detection, pattern recognition, and cost optimization algorithms.
 
 **[Live Demo](https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/)** | [Documentation](#documentation) | [Quick Start](#quick-start)
 
