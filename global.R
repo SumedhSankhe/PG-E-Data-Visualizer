@@ -53,6 +53,45 @@ read_rds_safely <- function(path) {
   })
 }
 
+# Helper: safely read meter data from SQLite or RDS fallback
+read_meter_data_safely <- function(sqlite_path = "data/pge_meter_data.sqlite", rds_path = "data/meterData.rds") {
+  # Try SQLite first
+  if (file.exists(sqlite_path)) {
+    log_info("Attempting to load data from SQLite: {sqlite_path}")
+    tryCatch({
+      con <- DBI::dbConnect(RSQLite::SQLite(), sqlite_path)
+      on.exit(DBI::dbDisconnect(con), add = TRUE)
+
+      # Check if table exists
+      if (DBI::dbExistsTable(con, "meter_data")) {
+        dt <- data.table::as.data.table(DBI::dbReadTable(con, "meter_data"))
+
+        # Convert dttm_start from character to POSIXct
+        dt[, dttm_start := as.POSIXct(dttm_start)]
+
+        # Select only required columns
+        required_cols <- c("dttm_start", "hour", "value", "day", "day2")
+        available_cols <- intersect(required_cols, names(dt))
+        dt <- dt[, ..available_cols]
+
+        log_info("Loaded {nrow(dt)} rows from SQLite database")
+        log_info("Date range: {min(dt$dttm_start)} to {max(dt$dttm_start)}")
+        return(dt)
+      } else {
+        log_warn("Table 'meter_data' not found in SQLite database")
+      }
+    }, error = function(e) {
+      log_error("Failed to read from SQLite: {e$message}")
+    })
+  } else {
+    log_info("SQLite database not found at {sqlite_path}")
+  }
+
+  # Fallback to RDS
+  log_info("Falling back to RDS file: {rds_path}")
+  return(read_rds_safely(rds_path))
+}
+
 # Source modules
 source('home.R')
 source('loadData.R')

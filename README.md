@@ -306,6 +306,62 @@ shiny::runApp('.')
 
 ---
 
+## Automated Data Updates (New!)
+
+For **PG&E residential customers**, you can now automate daily data fetching from your smart meter instead of manual downloads!
+
+### Features
+
+- **Zero Manual Work**: Fully automated daily data fetching from PGE Share My Data API
+- **Auto-Detection**: Automatically detects 15-minute/hourly intervals and aggregates to hourly
+- **SQLite Database**: Efficient database storage bundled with the app
+- **GitHub Actions**: Daily automated pipeline (fetch → process → deploy)
+- **100% Free**: Uses only free services (PGE API, GitHub Actions, shinyapps.io)
+
+### Quick Status
+
+✅ **Data Processing**: Complete - Process your real PGE data
+✅ **Database Integration**: Complete - SQLite database support
+⏳ **API Automation**: Ready (waiting for PGE API approval)
+
+### Getting Started
+
+#### Option 1: Process Manual Downloads (Works Now)
+Download your PGE Green Button data and run:
+```r
+Rscript scripts/automation/convert_pge_download_v2.R
+```
+
+This automatically:
+- Detects your data interval (15-min/hourly)
+- Aggregates to hourly if needed
+- Creates SQLite database + RDS backup
+- Your Shiny app loads the new data
+
+#### Option 2: Full Automation (After PGE Approval)
+Set up once, then forget it! Daily automated fetching from PGE API.
+
+### Documentation
+
+Complete documentation in [`docs/automation/`](docs/automation/):
+
+- **[STATUS.md](docs/automation/STATUS.md)** - Current project status and next steps
+- **[TEST_SHINY_APP.md](docs/automation/TEST_SHINY_APP.md)** - How to test with your real PGE data
+- **[SETUP.md](docs/automation/SETUP.md)** - Complete PGE API setup guide
+- **[DATA_INTERVALS.md](docs/automation/DATA_INTERVALS.md)** - How automatic aggregation works
+
+### Testing Your Data
+
+After processing your PGE data, verify it's ready:
+```r
+source("scripts/utils/verify_app_data.R")  # Verify database integrity
+shiny::runApp()                             # Launch app with your data
+```
+
+See **[TEST_SHINY_APP.md](docs/automation/TEST_SHINY_APP.md)** for detailed testing guide.
+
+---
+
 ## Data Format
 
 ### Required Columns
