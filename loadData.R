@@ -160,9 +160,9 @@ loadServer <- function(id) {
           return(df)
         }
 
-        # Fallback to default RDS
-        log_info("[loadData] Using fallback RDS: {DEFAULT_DATA_FILE}")
-        read_rds_safely(DEFAULT_DATA_FILE)
+        # Load from SQLite database (with RDS fallback)
+        log_info("[loadData] Loading default data (SQLite or RDS fallback)")
+        read_meter_data_safely()
       })
 
       # Data validity check (additional monitoring)
