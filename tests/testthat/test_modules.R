@@ -44,7 +44,7 @@ testthat::test_that("loadServer returns reactive dataset", {
 
 # Test helper functions ---------------------------------------------------
 testthat::test_that("safe_divide prevents division by zero", {
-  source("helpers.R")
+  source("../../helpers.R", chdir = TRUE)
   testthat::expect_equal(safe_divide(10, 2), 5)
   testthat::expect_equal(safe_divide(10, 0), 0)
   testthat::expect_equal(safe_divide(10, 0, default = NA), NA)
@@ -52,15 +52,15 @@ testthat::test_that("safe_divide prevents division by zero", {
 })
 
 testthat::test_that("safe_percentage calculates correctly", {
-  source("helpers.R")
+  source("../../helpers.R", chdir = TRUE)
   testthat::expect_equal(safe_percentage(25, 100), 25)
   testthat::expect_equal(safe_percentage(10, 0), 0)
   testthat::expect_equal(safe_percentage(5, 20), 25)
 })
 
 testthat::test_that("validate_upload_file rejects invalid files", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   # Test invalid extension
   invalid_file <- list(
@@ -85,8 +85,8 @@ testthat::test_that("validate_upload_file rejects invalid files", {
 })
 
 testthat::test_that("validate_required_columns checks columns", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   # Valid data
   valid_data <- data.table(
@@ -109,8 +109,8 @@ testthat::test_that("validate_required_columns checks columns", {
 
 # Test QC calculations ----------------------------------------------------
 testthat::test_that("calculate_qc_metrics works correctly", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   dt <- create_test_data(100, include_issues = TRUE)
   qc <- calculate_qc_metrics(dt)
@@ -141,8 +141,8 @@ testthat::test_that("qcServer calculates quality metrics", {
 
 # Test anomaly detection --------------------------------------------------
 testthat::test_that("detect_anomalies_iqr identifies outliers", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   dt <- create_test_data(100)
   dt$value[c(50, 51, 52)] <- c(100, 105, 110)  # Add clear outliers
@@ -173,8 +173,8 @@ testthat::test_that("anomalyServer detects anomalies", {
 
 # Test rate plan comparison -----------------------------------------------
 testthat::test_that("compare_rate_plans returns valid comparisons", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   dt <- create_test_data(100)
   dt[, start_date := as.Date(dttm_start)]
@@ -190,8 +190,8 @@ testthat::test_that("compare_rate_plans returns valid comparisons", {
 
 # Test input validation ---------------------------------------------------
 testthat::test_that("validate_peak_hours catches invalid inputs", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   # Valid hours
   result <- validate_peak_hours(16, 21)
@@ -207,8 +207,8 @@ testthat::test_that("validate_peak_hours catches invalid inputs", {
 })
 
 testthat::test_that("validate_rate catches invalid rates", {
-  source("config.R")
-  source("helpers.R")
+  source("../../config.R", chdir = TRUE)
+  source("../../helpers.R", chdir = TRUE)
 
   # Valid rate
   result <- validate_rate(0.45, "Test rate")
