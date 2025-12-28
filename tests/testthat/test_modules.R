@@ -125,6 +125,7 @@ testthat::test_that("calculate_qc_metrics works correctly", {
 
 # Test QC Server ----------------------------------------------------------
 testthat::test_that("qcServer calculates quality metrics", {
+  source("../../qc.R", chdir = TRUE)
   dt_test <- create_test_data(100, include_issues = TRUE)
 
   shiny::testServer(qcServer, args = list(dt = reactive(dt_test)), {

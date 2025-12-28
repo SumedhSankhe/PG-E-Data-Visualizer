@@ -12,7 +12,11 @@ run_tests <- function() {
   }
 
   message("Running unit/module tests...")
-  testthat::test_dir("tests/testthat")
+  testthat::test_dir(
+    "tests/testthat",
+    reporter = testthat::JunitReporter$new("test-results.xml"),
+    stop_on_failure = FALSE
+  )
 
   if (requireNamespace("shinytest2", quietly = TRUE)) {
     message("(Optional) Add shinytest2 snapshots under tests/testthat/__snapshots__")
