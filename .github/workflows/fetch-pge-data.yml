@@ -32,9 +32,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install pgesmd-self-access pandas
 
-      - name: Install R dependencies
+      - name: Restore renv dependencies
         run: |
-          install.packages(c('data.table', 'logger', 'DBI', 'RSQLite'))
+          install.packages('renv')
+          renv::restore(prompt = FALSE)
         shell: Rscript {0}
 
       - name: Create data directory
@@ -48,12 +49,12 @@ jobs:
           PGE_CERT_PATH: ${{ secrets.PGE_CERT_PATH }}
         run: |
           echo "Fetching data from PGE Share My Data API..."
-          python scripts/fetch_pge_data.py
+          python scripts/automation/fetch_pge_data.py
 
       - name: Process and merge data
         run: |
           echo "Processing data and merging with existing records..."
-          Rscript scripts/process_pge_data.R
+          Rscript scripts/automation/process_pge_data.R
 
       - name: Check for changes
         id: check_changes
