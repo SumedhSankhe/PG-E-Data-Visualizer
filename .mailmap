@@ -1,0 +1,7 @@
+# Map all commit identities to canonical author identity
+# Format: Canonical Name <canonical@email> Commit Name <commit@email>
+
+Sumedh Sankhe <sumedh.sankhe@gmail.com> Sumedh Sankhe <sumedh@users.noreply.github.com>
+Sumedh Sankhe <sumedh.sankhe@gmail.com> Sumedh Sankhe <ssankhe@alamarbio.com>
+Sumedh Sankhe <sumedh.sankhe@gmail.com> Sumedh R. Sankhe <sumedh.sankhe@gmail.com>
+Sumedh Sankhe <sumedh.sankhe@gmail.com> SumedhSankhe <sumedh.sankhe@gmail.com>
