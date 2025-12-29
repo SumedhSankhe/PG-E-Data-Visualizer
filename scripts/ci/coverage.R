@@ -29,8 +29,19 @@ cov <- tryCatch({
     return(NULL)
   }
 
+  # Get test files
+  test_files <- list.files("tests/testthat", pattern = "^test.*\\.R$", full.names = TRUE)
+
+  if (length(test_files) == 0) {
+    message("No test files found")
+    return(NULL)
+  }
+
   tryCatch({
-    covr::file_coverage(r_files, test_files = "tests/testthat")
+    covr::file_coverage(
+      source_files = r_files,
+      test_files = test_files
+    )
   }, error = function(e2) {
     message("File coverage also failed: ", e2$message)
     return(NULL)
