@@ -34,6 +34,7 @@ create_test_data <- function(n_rows = 100, include_issues = FALSE) {
 
 # Test loadServer ---------------------------------------------------------
 testthat::test_that("loadServer returns reactive dataset", {
+  source("../../loadData.R", chdir = TRUE)
   testthat::skip_if_not(file.exists("data/meterData.rds"), "data/meterData.rds missing")
   shiny::testServer(loadServer, {
     dat <- session$returned()
@@ -157,6 +158,7 @@ testthat::test_that("detect_anomalies_iqr identifies outliers", {
 
 # Test anomalyServer ------------------------------------------------------
 testthat::test_that("anomalyServer detects anomalies", {
+  source("../../anomaly.R", chdir = TRUE)
   dt_test <- create_test_data(100)
   dt_test$value[50:55] <- c(100, 105, 110, 95, 102, 108)  # Add outliers
 
