@@ -32,7 +32,7 @@ jobs:
           fi
 
       - name: Run lintr
-        run: Rscript scripts/lint.R | tee lint-output.txt
+        run: Rscript scripts/ci/lint.R | tee lint-output.txt
 
       - name: Style check (dry run)
         run: R -q -e 'styler::style_dir(".", filetype = c("R"), exclude_dirs = c("renv"))'
@@ -71,11 +71,11 @@ jobs:
 
       - name: Run tests
         run: |
-          Rscript scripts/test.R | tee test-output.txt
+          Rscript scripts/ci/test.R | tee test-output.txt
 
       - name: Compute coverage
         run: |
-          Rscript scripts/coverage.R
+          Rscript scripts/ci/coverage.R
 
       - name: Upload test artifacts
         uses: actions/upload-artifact@v4
