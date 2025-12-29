@@ -19,7 +19,9 @@ Imports:
     shinycssloaders,
     shinyjs,
     openxlsx,
-    logger
+    logger,
+    DBI,
+    RSQLite
 Suggests:
     testthat,
     lintr,
