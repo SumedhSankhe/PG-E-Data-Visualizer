@@ -4,6 +4,9 @@ suppressPackageStartupMessages({
   if (!requireNamespace("covr", quietly = TRUE)) {
     install.packages("covr")
   }
+  if (!requireNamespace("testthat", quietly = TRUE)) {
+    install.packages("testthat")
+  }
   library(covr)
 })
 
@@ -12,27 +15,30 @@ cov <- tryCatch({
   # Try package_coverage first (for proper R packages)
   covr::package_coverage(line_exclusions = list("renv" = 1:9999))
 }, error = function(e) {
-  message("package_coverage failed (expected for Shiny apps), trying file coverage...")
+  message("package_coverage failed (expected for Shiny apps), trying alternative approach...")
 
-  # For Shiny apps, use file coverage on key R files
-  r_files <- c(
-    "global.R", "server.R", "ui.R", "helpers.R",
-    "loadData.R", "home.R", "qc.R", "anomaly.R",
-    "pattern.R", "cost.R", "config.R"
-  )
-
-  # Only include files that exist
-  r_files <- r_files[file.exists(r_files)]
-
-  if (length(r_files) == 0) {
-    message("No R files found for coverage analysis")
-    return(NULL)
-  }
-
+  # For Shiny apps, use environment_coverage
   tryCatch({
-    covr::file_coverage(r_files, test_files = "tests/testthat")
+    # Create test environment
+    test_env <- new.env(parent = globalenv())
+
+    # Source all app files into the environment
+    sys.source("helpers.R", envir = test_env)
+    sys.source("config.R", envir = test_env)
+    sys.source("loadData.R", envir = test_env)
+    sys.source("home.R", envir = test_env)
+    sys.source("qc.R", envir = test_env)
+    sys.source("anomaly.R", envir = test_env)
+    sys.source("pattern.R", envir = test_env)
+    sys.source("cost.R", envir = test_env)
+
+    # Run coverage on the environment
+    covr::environment_coverage(
+      env = test_env,
+      test_files = list.files("tests/testthat", pattern = "^test.*\\.R$", full.names = TRUE)
+    )
   }, error = function(e2) {
-    message("File coverage also failed: ", e2$message)
+    message("environment_coverage also failed: ", e2$message)
     return(NULL)
   })
 })
