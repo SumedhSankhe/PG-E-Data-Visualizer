@@ -99,7 +99,6 @@ jobs:
           git config user.email "actions@github.com"
           git add data/pge_meter_data.sqlite
           git add data/meterData.rds
-          git add logs/data-processing.log
           git commit -m "Auto-update: PGE data fetch $(date +'%Y-%m-%d %H:%M UTC')"
           git push
         env:
