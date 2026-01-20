@@ -16,4 +16,5 @@ venv/
 
 # Credentials and secrets
 scripts/automation/test_credentials.py
+scripts/automation/supabase_client.py
 auth/auth.json

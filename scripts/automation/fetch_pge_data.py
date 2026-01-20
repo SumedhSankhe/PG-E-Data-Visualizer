@@ -43,8 +43,9 @@ def create_auth_file():
     client_id = os.getenv('PGE_CLIENT_ID')
     client_secret = os.getenv('PGE_CLIENT_SECRET')
     access_token = os.getenv('PGE_ACCESS_TOKEN', '')
-    cert_path = os.getenv('PGE_CERT_PATH', '')
-
+    cert_crt_path = os.getenv('PGE_CERT_CRT_PATH', '')
+    cert_key_path = os.getenv('PGE_CERT_KEY_PATH', '')
+    
     if not client_id or not client_secret:
         return None
 
@@ -55,7 +56,7 @@ def create_auth_file():
         "client_id": client_id,
         "client_secret": client_secret,
         "cert_crt_path": cert_path,
-        "cert_key_path": cert_path  # Same path if using combined cert
+        "cert_key_path": cert_key_path  # Same path if using combined cert
     }
 
     # Write temp auth file

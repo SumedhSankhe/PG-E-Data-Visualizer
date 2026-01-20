@@ -56,15 +56,18 @@ jobs:
       - name: Create data directory
         run: mkdir -p data
 
-      - name: Fetch PGE data
+      - name: Fetch and parse PGE data from Supabase
         env:
           PGE_CLIENT_ID: ${{ secrets.PGE_CLIENT_ID }}
           PGE_CLIENT_SECRET: ${{ secrets.PGE_CLIENT_SECRET }}
-          PGE_ACCESS_TOKEN: ${{ secrets.PGE_ACCESS_TOKEN }}
-          PGE_CERT_PATH: ${{ secrets.PGE_CERT_PATH }}
+          PGE_THIRD_PARTY_ID: ${{ secrets.PGE_THIRD_PARTY_ID }}
+          PGE_CERT_CRT_BASE64: ${{ secrets.PGE_CERT_CRT_BASE64 }}
+          PGE_CERT_KEY_BASE64: ${{ secrets.PGE_CERT_KEY_BASE64 }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
-          echo "Fetching data from PGE Share My Data API..."
-          python scripts/automation/fetch_pge_data.py
+          echo "Fetching data from Supabase and PGE API..."
+          python scripts/automation/fetch_and_parse_pge.py
 
       - name: Process and merge data
         run: |
