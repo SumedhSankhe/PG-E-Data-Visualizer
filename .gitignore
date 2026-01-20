@@ -16,3 +16,4 @@ venv/
 
 # Credentials and secrets
 scripts/automation/test_credentials.py
+auth/auth.json

@@ -26,8 +26,25 @@ log_info("=" , rep("=", 58))
 
 # Validate input file exists
 if (!file.exists(NEW_CSV)) {
-  log_error("New CSV file not found: {NEW_CSV}")
-  stop("CSV file not found")
+  log_warn("New CSV file not found: {NEW_CSV}")
+
+  # Check if database already exists with data
+  if (file.exists(DB_FILE)) {
+    log_info("Using existing database data (no new CSV to process)")
+
+    # Connect and verify data exists
+    con <- dbConnect(RSQLite::SQLite(), DB_FILE)
+    existing_count <- dbGetQuery(con, "SELECT COUNT(*) as count FROM meter_data")$count
+    dbDisconnect(con)
+
+    if (existing_count > 0) {
+      log_info("Database contains {existing_count} rows - no processing needed")
+      quit(status = 0)
+    }
+  }
+
+  log_error("No CSV file and no existing database data")
+  stop("No data available to process")
 }
 
 # Load new CSV data
