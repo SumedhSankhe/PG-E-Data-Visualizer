@@ -74,6 +74,14 @@ jobs:
           echo "Processing data and merging with existing records..."
           Rscript scripts/automation/process_pge_data.R
 
+      - name: Mark Supabase rows as processed
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "Marking Supabase rows as processed..."
+          python scripts/automation/mark_processed.py
+
       - name: Check for changes
         id: check_changes
         run: |

@@ -19,7 +19,7 @@ LOG_FILE <- "logs/data-processing.log"
 
 # Setup logging
 dir.create("logs", showWarnings = FALSE, recursive = TRUE)
-log_appender(appender_tee(appender_console(), appender_file(LOG_FILE)))
+log_appender(appender_tee(LOG_FILE))
 log_info("=" , rep("=", 58))
 log_info("PGE Data Processing Script")
 log_info("=" , rep("=", 58))

@@ -342,13 +342,13 @@ def main():
     else:
         logger.warning("No readings parsed from any URI")
 
-    # Mark rows as processed
-    for row_id in processed_row_ids:
-        try:
-            mark_row_processed(supabase_url, supabase_key, row_id)
-            logger.info(f"Marked row {row_id} as processed")
-        except Exception as e:
-            logger.error(f"Failed to mark row {row_id} as processed: {e}")
+    # Save processed row IDs to file for later marking
+    # (Marking happens in a separate step after R processing succeeds)
+    if processed_row_ids:
+        processed_ids_file = output_dir / 'processed_row_ids.json'
+        with open(processed_ids_file, 'w') as f:
+            json.dump(processed_row_ids, f)
+        logger.info(f"Saved {len(processed_row_ids)} row IDs to {processed_ids_file}")
 
     logger.info("=" * 60)
     logger.info("Complete!")
