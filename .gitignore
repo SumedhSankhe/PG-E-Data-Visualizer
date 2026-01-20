@@ -10,3 +10,9 @@ logs/*.txt
 logs/*.json
 data/*.csv
 docs/
+
+# Python virtual environment
+venv/
+
+# Credentials and secrets
+scripts/automation/test_credentials.py
