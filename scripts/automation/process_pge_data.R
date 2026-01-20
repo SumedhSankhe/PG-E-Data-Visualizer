@@ -20,9 +20,9 @@ LOG_FILE <- "logs/data-processing.log"
 # Setup logging
 dir.create("logs", showWarnings = FALSE, recursive = TRUE)
 log_appender(appender_tee(LOG_FILE))
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 log_info("PGE Data Processing Script")
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 
 # Validate input file exists
 if (!file.exists(NEW_CSV)) {
@@ -255,17 +255,17 @@ saveRDS(backup_dt, BACKUP_RDS)
 log_info("Backup RDS saved with {nrow(backup_dt)} rows")
 
 # Summary statistics
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 log_info("Processing Summary")
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 log_info("Total rows: {nrow(combined_dt)}")
 log_info("Date range: {min(combined_dt$dttm_start)} to {max(combined_dt$dttm_start)}")
 log_info("Total days: {length(unique(as.Date(combined_dt$dttm_start)))}")
 log_info("Total consumption: {round(sum(combined_dt$value, na.rm = TRUE), 2)} kWh")
 log_info("Average hourly consumption: {round(mean(combined_dt$value, na.rm = TRUE), 2)} kWh")
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 log_info("Processing complete!")
-log_info("=" , rep("=", 58))
+log_info(strrep("=", 60))
 
 # Exit successfully
 quit(status = 0)
