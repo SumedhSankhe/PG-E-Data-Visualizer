@@ -9,7 +9,6 @@ logs/*.log
 logs/*.txt
 logs/*.json
 data/*.csv
-docs/
 
 # Python virtual environment
 venv/
