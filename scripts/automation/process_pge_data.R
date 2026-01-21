@@ -207,8 +207,8 @@ if (existing_count > 0) {
 # Insert new data (using INSERT OR REPLACE to handle duplicates)
 log_info("Inserting new data into database")
 
-# Convert POSIXct to character for SQLite storage
-new_dt[, dttm_start := as.character(dttm_start)]
+# Convert POSIXct to character for SQLite storage (always include time)
+new_dt[, dttm_start := format(dttm_start, "%Y-%m-%d %H:%M:%S")]
 
 # Write to database (will replace duplicates)
 rows_before <- dbGetQuery(con, "SELECT COUNT(*) as count FROM meter_data")$count
