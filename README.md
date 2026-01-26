@@ -8,6 +8,11 @@ An R Shiny application that analyzes smart meter energy data through quality con
 
 **[Live Demo](https://ssankhe.shinyapps.io/PG-E-Data-Visualizer/)** | [Contributing](CONTRIBUTING.md)
 
+
+---
+## Architecture
+![Architecture](docs/images/architecture.svg)
+
 ---
 
 ## Features
@@ -68,3 +73,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 **Author**: [Sumedh Sankhe](https://github.com/SumedhSankhe)
+
