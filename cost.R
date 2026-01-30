@@ -283,6 +283,21 @@ costServer <- function(id, dt) {
           need(nrow(df) > 0, 'No data available for the selected date range. Please select a valid date range with data.')
         )
 
+        # Validation: Check for unrealistic daily consumption (data unit issue detection)
+        daily_totals <- df[, .(daily_kwh = sum(value, na.rm = TRUE)), by = start_date]
+        max_daily <- max(daily_totals$daily_kwh, na.rm = TRUE)
+
+        if (max_daily > 500) {
+          showNotification(
+            paste0("Warning: Daily consumption appears unusually high (",
+                   round(max_daily), " kWh/day). Data may be in Wh instead of kWh. ",
+                   "Please verify the data source and units."),
+            type = "warning",
+            duration = 15
+          )
+          logger::log_warn("Unrealistic daily consumption detected: {round(max_daily)} kWh/day")
+        }
+
         results <- list()
         results$rate_plan <- input$rate_plan
         results$data <- df

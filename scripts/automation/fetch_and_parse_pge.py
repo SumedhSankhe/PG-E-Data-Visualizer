@@ -232,7 +232,9 @@ def parse_espi_xml(xml_string):
             start_ts = int(start_elem.text)
             duration = int(duration_elem.text) if duration_elem is not None else 3600
 
-            # Get value (in Wh, need to convert to kWh)
+            # CRITICAL: Convert Wh to kWh
+            # PG&E ESPI XML provides energy values in Wh (Watt-hours)
+            # We divide by 1000 to convert to kWh for consistency with cost calculations
             value_elem = reading.find('espi:value', NAMESPACES)
             if value_elem is None:
                 continue

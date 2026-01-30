@@ -76,9 +76,11 @@ if ("dttm_start" %in% names(new_dt) && "value" %in% names(new_dt)) {
       # Round timestamps to nearest hour
       new_dt[, hour_timestamp := as.POSIXct(format(dttm_start, "%Y-%m-%d %H:00:00"))]
 
-      # Aggregate by hour (sum values)
+      # Aggregate by hour (sum values and convert Wh to kWh)
+      # CRITICAL: PGE API returns values in Wh (Watt-hours)
+      # We divide by 1000 to convert to kWh for consistency
       aggregated <- new_dt[, .(
-        value = sum(value, na.rm = TRUE),
+        value = sum(value, na.rm = TRUE) / 1000,  # Convert Wh to kWh
         count = .N
       ), by = hour_timestamp]
 
